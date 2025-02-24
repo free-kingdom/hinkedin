@@ -1,0 +1,48 @@
+HELP.md
+/linkedin_backend/.gradle
+/linkedin_backend/build/
+!/linkedin_backend/gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+/linkedin_backend/.apt_generated
+/linkedin_backend/.classpath
+/linkedin_backend/.factorypath
+/linkedin_backend/.project
+/linkedin_backend/.settings
+/linkedin_backend/.springBeans
+/linkedin_backend/.sts4-cache
+/linkedin_backend/bin/
+
+### IntelliJ IDEA ###
+/linkedin_backend/.idea
+/linkedin_backend/*.iws
+/linkedin_backend/*.iml
+/linkedin_backend/*.ipr
+/linkedin_backend/out/
+
+# Logs
+/linkedin_frontend/logs
+/linkedin_frontend/*.log
+/linkedin_frontend/npm-debug.log*
+/linkedin_frontend/yarn-debug.log*
+/linkedin_frontend/yarn-error.log*
+/linkedin_frontend/pnpm-debug.log*
+/linkedin_frontend/lerna-debug.log*
+
+/linkedin_frontend/node_modules
+/linkedin_frontend/dist
+/linkedin_frontend/dist-ssr
+/linkedin_frontend/*.local
+
+# Editor directories and files
+/linkedin_frontend/.vscode/*
+/linkedin_frontend/.idea
+/linkedin_frontend/.DS_Store
+/linkedin_frontend/*.suo
+/linkedin_frontend/*.ntvs*
+/linkedin_frontend/*.njsproj
+/linkedin_frontend/*.sln
+/linkedin_frontend/*.sw?
+
+/.idea
+

@@ -7,4 +7,8 @@ spring:
     password: hinkedin
   jpa:
     hibernate:
-      ddl-auto: create # delete and recreate when each time restart
+      ddl-auto: update # 开发时自动更新schema
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

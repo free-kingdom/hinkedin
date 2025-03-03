@@ -1,3 +1,10 @@
 spring:
   application:
     name: linkedin_backend
+  datasource:
+    url: jdbc:postgresql://localhost:7001/hinkedin
+    username: hinkedin
+    password: hinkedin
+  jpa:
+    hibernate:
+      ddl-auto: create # delete and recreate when each time restart

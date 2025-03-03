@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: hinkedin
+      POSTGRES_PASSWORD: hinkedin
+      POSTGRES_DB: hinkedin
+    ports:
+      - '7001:5432'    # 左边宿主机端口，右边容器内部端口，5432为postgresql默认端口

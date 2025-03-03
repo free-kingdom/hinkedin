@@ -4,6 +4,7 @@
 
 package hhb.linkedin_backend.features.authentication.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,5 +21,6 @@ public class AuthenticationUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private final String email;
+    @JsonIgnore
     private final String password;
 }

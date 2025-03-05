@@ -7,6 +7,7 @@ import hhb.linkedin_backend.features.authentication.dto.AuthenticationResponseBo
 import hhb.linkedin_backend.features.authentication.model.AuthenticationUser;
 import hhb.linkedin_backend.features.authentication.repository.AuthenticationUserRepository;
 import hhb.linkedin_backend.features.authentication.utils.Encoder;
+import hhb.linkedin_backend.features.authentication.utils.JsonWebToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     // spring会autowire获取这个repo
+    private final JsonWebToken jsonWebToken;
     private final AuthenticationUserRepository authenticationUserRepository;
     private final Encoder encoder;
 
@@ -26,7 +28,17 @@ public class AuthenticationService {
         authenticationUserRepository.save(
                 new AuthenticationUser(authenticationRequestBody.getEmail(),
                         encoder.encode(authenticationRequestBody.getPassword())));
-        return new AuthenticationResponseBody("token", "Register success");
+        String token = jsonWebToken.generateToken(authenticationRequestBody.getEmail());
+        return new AuthenticationResponseBody(token, "注册成功");
     }
 
+    public AuthenticationResponseBody login(AuthenticationRequestBody authenticationRequestBody) {
+        var user = authenticationUserRepository.findByEmail(authenticationRequestBody.getEmail())
+                .orElseThrow(()-> new IllegalArgumentException("邮箱不正确"));
+        if (!encoder.matches(authenticationRequestBody.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("密码错误");
+        }
+        String token = jsonWebToken.generateToken(user.getEmail());
+        return new AuthenticationResponseBody(token, "登录成功");
+    }
 }

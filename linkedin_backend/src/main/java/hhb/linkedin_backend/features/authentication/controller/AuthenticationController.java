@@ -19,15 +19,20 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    // 使用jwt手动 protecting the route
     @GetMapping("/user")
-    public AuthenticationUser getUser() {
-        return authenticationService.getUser("hhb@rof.org");
+    public AuthenticationUser getUser(@RequestAttribute("AuthenticatedUser") AuthenticationUser user) {
+        return authenticationService.getUser(user.getEmail());
     }
-
 
     // @Valid会验证AuthenticationRequestBody是否满足要求，否则不会验证
     @PostMapping("/register")
     public AuthenticationResponseBody register(@Valid @RequestBody AuthenticationRequestBody registerRequestBody) {
         return authenticationService.register(registerRequestBody);
+    }
+
+    @PostMapping("/login")
+    public AuthenticationResponseBody login(@Valid @RequestBody AuthenticationRequestBody loginRequestBody) {
+        return authenticationService.login(loginRequestBody);
     }
 }

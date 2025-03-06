@@ -45,4 +45,19 @@ public class AuthenticationController {
         return new GeneralResponse("邮箱验证成功");
     }
 
+    @PutMapping("/send-password-reset-token")
+    public GeneralResponse sendResetPasswordToken(@RequestParam String email) {
+        authenticationService.sendResetPasswordToken(email);
+        return new GeneralResponse("验证码已发送");
+
+    }
+
+    @PutMapping("/reset-password")
+    public GeneralResponse resetPassword(
+            @RequestParam String token,
+            @RequestParam String email,
+            @RequestParam String password) {
+        authenticationService.resetPassword(email, password, token);
+        return new GeneralResponse("密码重置成功");
+    }
 }

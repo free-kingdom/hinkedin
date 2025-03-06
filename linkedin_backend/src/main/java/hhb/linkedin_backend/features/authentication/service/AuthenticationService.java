@@ -50,7 +50,7 @@ public class AuthenticationService {
             try {
                 emailService.sendEmail(email, subject, body);
             } catch (Exception e) {
-                logger.info("Error while sending email: {}", e.getMessage());
+                logger.info("Error while sending email when validate email address: {}", e.getMessage());
             }
         } else {
             throw new IllegalArgumentException("用户不存在或邮箱已验证");
@@ -92,5 +92,47 @@ public class AuthenticationService {
         }
         String token = jsonWebToken.generateToken(user.getEmail());
         return new AuthenticationResponseBody(token, "登录成功");
+    }
+
+    public void sendResetPasswordToken(String email) {
+        var userOptional = authenticationUserRepository.findByEmail(email);
+        if (userOptional.isPresent() && userOptional.get().isEmailVerified()) {
+            var user = userOptional.get();
+            String emailValidationToken = EmailService.generateEmailVerificationToken();
+            String hashedEmailValidationToken = encoder.encode(emailValidationToken);
+            user.setPasswordResetToken(hashedEmailValidationToken);
+            user.setPasswordResetTokenExpiryDate(LocalDateTime.now().plusMinutes(durationInMinutes));
+            authenticationUserRepository.save(user);
+
+            String subject = "Hinkedin用户密码重置";
+            String body = String.format("""
+                输入6位数字：<strong>%s</strong> 进行密码重置，请在%d分钟内进行操作。
+                """, emailValidationToken, durationInMinutes);
+            try {
+                emailService.sendEmail(email, subject, body);
+            } catch (Exception e) {
+                logger.info("Error while sending email when reset password: {}", e.getMessage());
+            }
+        } else {
+            throw new IllegalArgumentException("用户不存在");
+        }
+    }
+
+    public void resetPassword(String email, String password, String token) {
+        var userOptional = authenticationUserRepository.findByEmail(email);
+        if (userOptional.isPresent() && userOptional.get().isEmailVerified()) {
+            var user = userOptional.get();
+            if (encoder.matches(token, user.getPasswordResetToken())
+                    && !user.getPasswordResetTokenExpiryDate().isBefore(LocalDateTime.now())) {
+                user.setPassword(encoder.encode(password));
+                user.setPasswordResetToken(null);
+                user.setPasswordResetTokenExpiryDate(null);
+                authenticationUserRepository.save(user);
+            } else {
+                throw new IllegalArgumentException("验证码错误或已失效");
+            }
+        } else {
+            throw new IllegalArgumentException("用户不存在");
+        }
     }
 }

@@ -12,6 +12,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  mail:
+    host: localhost
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
 jwt: # 可用该命令生成签名 openssl rand -base64 32，生产环境可保存在环境变量中
   secret:
     key: ycKFN6Qa4/Di21GjCqy0ECDjBkcL9vfXtpy+MM74+eA=

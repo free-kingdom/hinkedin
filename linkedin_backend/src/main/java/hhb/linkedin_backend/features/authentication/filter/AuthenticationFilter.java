@@ -19,7 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthenticationFilter extends HttpFilter {
     private final List<String> unsecureEndpoints = Arrays.asList(
-            "/api/authentication/login", "/api/authentication/register"
+            "/api/authentication/login", "/api/authentication/register",
+            "/api/authentication/send-password-reset-token",
+            "/api/authentication/reset-password"
     );
     private final JsonWebToken jsonWebToken;
     private final AuthenticationService authenticationService;

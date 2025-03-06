@@ -1,3 +1,5 @@
+// DTO 是一个简化版的数据对象，只暴露给前端或其他服务所需的字段
+
 package hhb.linkedin_backend.features.authentication.dto;
 
 import jakarta.validation.constraints.NotBlank;

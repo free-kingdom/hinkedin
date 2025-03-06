@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // for JPA
@@ -25,4 +27,10 @@ public class AuthenticationUser {
     private final String email;
     @JsonIgnore
     private final String password;
+
+    private boolean emailVerified = false;
+    private String emailVerificationToken = null;
+    private LocalDateTime emailVerificationTokenExpiryDate = null;
+    private String passwordResetToken = null;
+    private LocalDateTime passwordResetTokenExpiryDate = null;
 }

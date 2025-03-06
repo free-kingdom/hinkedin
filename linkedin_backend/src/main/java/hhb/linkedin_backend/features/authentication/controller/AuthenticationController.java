@@ -4,6 +4,7 @@
 
 package hhb.linkedin_backend.features.authentication.controller;
 
+import hhb.linkedin_backend.dto.GeneralResponse;
 import hhb.linkedin_backend.features.authentication.dto.AuthenticationRequestBody;
 import hhb.linkedin_backend.features.authentication.dto.AuthenticationResponseBody;
 import hhb.linkedin_backend.features.authentication.model.AuthenticationUser;
@@ -35,4 +36,13 @@ public class AuthenticationController {
     public AuthenticationResponseBody login(@Valid @RequestBody AuthenticationRequestBody loginRequestBody) {
         return authenticationService.login(loginRequestBody);
     }
+
+    @PutMapping("/validate-email-verification-token")
+    public GeneralResponse validateEmailVerificationToken(
+            @RequestParam String token,
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user) {
+        authenticationService.verifyEmailToken(token, user.getEmail());
+        return new GeneralResponse("邮箱验证成功");
+    }
+
 }

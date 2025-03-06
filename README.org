@@ -1,12 +1,16 @@
 * hinkedin mono repo
 - Linkedin clone follow by Youssouf Oumar's [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][videos]]
-- A React.js + Spring full-stack project
+- A React.js + Spring Boot full-stack project
 ** notes
-*** dev
-    - running
-      ./gradlew bootRun
-    - continuously build and not run test each time
-      ./gradlew build -t -x test
-    - docker
-      docker compose up
-      docker compose down
+*** dev java
+1. running
+   ./gradlew bootRun
+2. continuously build and not run test each time
+   ./gradlew build -t -x test
+3. docker
+   docker compose up
+   docker compose down
+*** dev ts
+1. npm run dev
+** frontend
+** backend

@@ -4,7 +4,7 @@ import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div className="m-4 p-4 border font-bold text-xl">
+    <div className="m-4 p-4 border font-bold text-xl bg-linkedin">
       hello react
     </div>
   </StrictMode>,

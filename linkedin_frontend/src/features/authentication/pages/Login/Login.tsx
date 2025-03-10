@@ -5,7 +5,7 @@ import { Button } from "../../components/Button/Button"
 
 export function Login() {
     return (
-        <Layout slogan="登录到我们的平台">
+        <Layout slogan="登录到领英">
             <Box>
                 <form className="bg-white px-8 pt-8 pb-6 rounded-lg shadow-lg grid gap-4 md:w-96 w-full">
                     <Input type="email" id="email" label="邮箱"/>

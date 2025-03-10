@@ -4,13 +4,17 @@
 ** notes
 *** dev java
 1. running
-   ./gradlew bootRun
+   - ./gradlew bootRun
 2. continuously build and not run test each time
-   ./gradlew build -t -x test
+   - ./gradlew build -t -x test
 3. docker
-   docker compose up
-   docker compose down
+   - docker compose up
+   - docker compose down
 *** dev ts
 1. npm run dev
 ** frontend
+1. react-router-dom
+2. tailwindcss
 ** backend
+1. postgres
+2. mailhog

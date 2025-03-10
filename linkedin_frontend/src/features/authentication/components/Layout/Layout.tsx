@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
 
-export function Layout({children} : {children: ReactNode}) {
+export function Layout({children, slogan} : {children: ReactNode, slogon:string}) {
     return (
-        <div className="bg-gray-100 grid grid-rows-[auto_1fr_auto] h-screen">
-            <header className="mx-32 my-8">
-                <a href="/">
-                    <img className="w-32" alt="logo" src="/logo.svg" />
+        <div className="bg-gray-50 grid grid-rows-[auto_1fr_auto] h-screen">
+            <header className="px-16 pt-6 md:px-32 md:pt-8 grid grid-rows-2">
+                <a href="/" className="w-32">
+                    <img alt="logo" src="/logo.svg" />
                 </a>
+                <h1 className="text-center text-[32px]">{slogan}</h1>
             </header>
-            <main className="flex justify-center items-center">
+            <main className="">
                 {children}
             </main>
-            <footer className="pb-6 text-xs bg-white font-bold">
+            <footer className="pt-2 pb-4 text-xs bg-white font-bold">
                 <ul className="flex justify-center items-center flex-wrap gap-3 mt-2 text-gray-500">
                     <li className="flex gap-1">
                         <img className="w-16" alt="dark-logo" src="/logo-dark.svg"/>

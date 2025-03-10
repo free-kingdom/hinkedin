@@ -1,0 +1,9 @@
+import { ReactNode } from "react";
+
+export function Box ({children}: {children: ReactNode}) {
+    return (
+        <div className="grid mt-4 space-y-4 justify-center">
+            {children}
+        </div>
+    )
+}

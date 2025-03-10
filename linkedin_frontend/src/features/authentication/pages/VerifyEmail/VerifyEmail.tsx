@@ -1,9 +1,12 @@
-import { Layout } from "../../components/layout/Layout"
+import { Layout } from "../../components/Layout/Layout"
+import { Box } from "../../components/Box/Box";
 
 export function VerifyEmail() {
     return  (
         <Layout>
-            VerifyEmail
+            <Box>
+                VerifyEmail
+            </Box>
         </Layout>
     )
 }

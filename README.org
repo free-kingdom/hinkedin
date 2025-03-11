@@ -1,6 +1,9 @@
 * hinkedin mono repo
 - Linkedin clone follow by Youssouf Oumar's [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][videos]]
 - A React.js + Spring Boot full-stack project
+** difference from the videos
+1. use tailwindcss for css
+2. use postgres for the database
 ** notes
 *** dev java
 1. running

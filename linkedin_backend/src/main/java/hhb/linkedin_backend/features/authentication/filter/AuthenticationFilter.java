@@ -32,10 +32,12 @@ public class AuthenticationFilter extends HttpFilter {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
 
         // cross-origin处理，前端会先通过http options访问服务器询问是否可以获取数据
         if (request.getMethod().equals("OPTIONS")) {
             response.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
 
         if (unsecureEndpoints.contains(request.getRequestURI())) {

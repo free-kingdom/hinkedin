@@ -1,5 +1,5 @@
 * hinkedin mono repo
-- Linkedin clone follow by Youssouf Oumar's [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][videos]]
+- Linkedin clone follow by Youssouf Oumar's [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][videos]] and [[https://github.com/yousoumar/linkedin][repo]].
 - A React.js + Spring Boot full-stack project
 ** difference from the videos
 1. use tailwindcss for css

@@ -3,4 +3,16 @@
 @theme{
     --color-linkedin: #0a66c2;
     --color-linkedin-dark: #004182;
+
+    --animate-slide: slide 1.5s infinite alternate;
+
+    @keyframes slide {
+        0% {
+            transform: translateX(0rem)
+        }
+
+        100% {
+            transform: translateX(8rem)
+        }
+    }
 }

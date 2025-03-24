@@ -3,16 +3,17 @@ import { Box } from "../../components/Box/Box";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function Signup() {
     const [errorMessage, setErrorMessage] = useState("*邮箱已存在");
-
+    const navigate = useNavigate();
     return (
         <Layout slogan="成就职业人生">
             <Box>
                 <form className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg md:shadow-lg grid gap-4 md:w-96 w-full">
-                    <Input type="email" id="email" label="邮箱"/>
-                    <Input type="password" id="password" label="密码"/>
+                    <Input type="email" name="email" label="邮箱" required />
+                    <Input type="password" name="password" label="密码" required />
                     {errorMessage && <p className="text-red-600">{errorMessage}</p>}
                     <label className="flex gap-1 text-md">
                         <input className="w-5 h-5" type="checkbox" value=""/>
@@ -24,7 +25,8 @@ export function Signup() {
                         <a href="" className="text-linkedin font-bold hover:underline">《隐私政策》</a>及
                         <a href="" className="text-linkedin font-bold hover:underline">《Cookie 政策》</a>。
                     </p>
-                    <Button outline={false} type="submit">
+                    <Button outline={false} type="submit"
+                            onClick={() => navigate("/verify-email")}>
                         同意并加入
                     </Button>
 

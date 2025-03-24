@@ -44,5 +44,7 @@ HELP.md
 /linkedin_frontend/*.sln
 /linkedin_frontend/*.sw?
 
+/linkedin_frontend/.env
+
 /.idea
 

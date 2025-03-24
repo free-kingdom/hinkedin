@@ -10,7 +10,7 @@ export function Layout({children, slogan} : {children: ReactNode, slogon:string}
                 <h1 className="text-center text-[32px] mt-2">{slogan}</h1>
             </header>
 
-            <main className="md:self-center">
+            <main className="self-center">
                 {children}
             </main>
 

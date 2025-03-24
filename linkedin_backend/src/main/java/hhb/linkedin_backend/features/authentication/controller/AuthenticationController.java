@@ -37,6 +37,12 @@ public class AuthenticationController {
         return authenticationService.login(loginRequestBody);
     }
 
+    @GetMapping("/send-email-verification-token")
+    public GeneralResponse sendEmailVerificationToken(@RequestAttribute("AuthenticatedUser") AuthenticationUser user) {
+        authenticationService.sendEmailVerificationToken(user.getEmail());
+        return new GeneralResponse("验证码已发送");
+    }
+
     @PutMapping("/validate-email-verification-token")
     public GeneralResponse validateEmailVerificationToken(
             @RequestParam String token,

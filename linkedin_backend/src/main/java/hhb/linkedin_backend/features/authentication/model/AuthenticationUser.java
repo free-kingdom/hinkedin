@@ -41,6 +41,6 @@ public class AuthenticationUser {
     public AuthenticationUser(String email, String password) {
         this.email = email;
         this.password = password;
-        this.emailVerified = true;
+        this.emailVerified = false;
     }
 }

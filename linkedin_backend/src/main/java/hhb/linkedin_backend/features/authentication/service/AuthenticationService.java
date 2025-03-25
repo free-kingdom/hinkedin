@@ -151,4 +151,8 @@ public class AuthenticationService {
         if (location != null) user.setLocation(location);
         return authenticationUserRepository.save(user);
     }
+
+    public void deleteUser(Long userId) {
+        authenticationUserRepository.deleteById(userId);
+    }
 }

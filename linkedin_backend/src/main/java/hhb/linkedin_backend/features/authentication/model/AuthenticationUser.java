@@ -5,12 +5,14 @@
 package hhb.linkedin_backend.features.authentication.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hhb.linkedin_backend.features.feed.model.Post;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true) // for JPA
@@ -27,8 +29,8 @@ public class AuthenticationUser {
     @JsonIgnore
     private String password;
 
+    @JsonIgnore
     private boolean emailVerified = false;
-
     @JsonIgnore
     private String emailVerificationToken = null;
     @JsonIgnore
@@ -40,10 +42,18 @@ public class AuthenticationUser {
 
     private String lastName;
     private String firstName;
+    @JsonIgnore
     private String company;
+    @JsonIgnore
     private String position;
+    @JsonIgnore
     private String location;
+    @JsonIgnore
     private boolean isProfileCompleted = false;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
     private void updateIsProfileCompleted() {
         this.isProfileCompleted = (lastName != null && firstName != null && company != null && position != null && location != null);

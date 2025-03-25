@@ -84,4 +84,10 @@ public class AuthenticationController {
         }
         return authenticationService.updateProfile(id, lastName, firstName, company, position, location);
     }
+
+    @DeleteMapping("/delete")
+    public GeneralResponse deleteUser(@RequestAttribute("AuthenticatedUser") AuthenticationUser user) {
+        authenticationService.deleteUser(user.getId());
+        return new GeneralResponse("用户注销成功");
+    }
 }

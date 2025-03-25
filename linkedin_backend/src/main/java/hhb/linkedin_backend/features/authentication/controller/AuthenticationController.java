@@ -11,7 +11,9 @@ import hhb.linkedin_backend.features.authentication.model.AuthenticationUser;
 import hhb.linkedin_backend.features.authentication.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/authentication")   // api访问前缀
@@ -65,5 +67,21 @@ public class AuthenticationController {
             @RequestParam String password) {
         authenticationService.resetPassword(email, password, token);
         return new GeneralResponse("密码重置成功");
+    }
+
+    @PutMapping("/profile/{id}")
+    public AuthenticationUser updateProfile(
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user,
+            @PathVariable long id,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String company,
+            @RequestParam(required = false) String position,
+            @RequestParam(required = false) String location
+    ){
+        if (user.getId() != id){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,  "用户无修改权限");
+        }
+        return authenticationService.updateProfile(id, lastName, firstName, company, position, location);
     }
 }

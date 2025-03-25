@@ -139,4 +139,16 @@ public class AuthenticationService {
             throw new IllegalArgumentException("用户不存在");
         }
     }
+
+    public AuthenticationUser updateProfile(Long userId, String lastName, String firstName,
+                                            String company, String position, String location) {
+        AuthenticationUser user = authenticationUserRepository.findById(userId).
+                orElseThrow(()->new IllegalArgumentException("用户不存在"));
+        if (lastName != null) user.setLastName(lastName);
+        if (firstName != null) user.setFirstName(firstName);
+        if (company != null) user.setCompany(company);
+        if (position != null) user.setPosition(position);
+        if (location != null) user.setLocation(location);
+        return authenticationUserRepository.save(user);
+    }
 }

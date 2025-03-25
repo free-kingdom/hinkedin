@@ -38,6 +38,42 @@ public class AuthenticationUser {
     @JsonIgnore
     private LocalDateTime passwordResetTokenExpiryDate = null;
 
+    private String lastName;
+    private String firstName;
+    private String company;
+    private String position;
+    private String location;
+    private boolean isProfileCompleted = false;
+
+    private void updateIsProfileCompleted() {
+        this.isProfileCompleted = (lastName != null && firstName != null && company != null && position != null && location != null);
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        updateIsProfileCompleted();
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        updateIsProfileCompleted();
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+        updateIsProfileCompleted();
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+        updateIsProfileCompleted();
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+        updateIsProfileCompleted();
+    }
+
     public AuthenticationUser(String email, String password) {
         this.email = email;
         this.password = password;

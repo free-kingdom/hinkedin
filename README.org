@@ -16,8 +16,13 @@
 *** dev ts
 1. npm run dev
 ** frontend
-1. react-router-dom
-2. tailwindcss
+1. typescript - react
+2. react-router-dom
+3. tailwindcss
 ** backend
-1. postgres
-2. mailhog
+1. java - spring boot
+2. postgres
+3. mailhog for smtp testing
+** features
+- authentication
+  use jwt for security, impl login/signup/verify email/reset password

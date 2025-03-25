@@ -36,6 +36,6 @@ public class BackendController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleException(Exception e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("message", "Something went wrong"));
+                .body(Map.of("message", "出错了，请稍候重试"));
     }
 }

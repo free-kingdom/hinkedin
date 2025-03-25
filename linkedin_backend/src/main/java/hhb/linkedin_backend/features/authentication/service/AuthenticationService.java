@@ -76,6 +76,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponseBody register(AuthenticationRequestBody authenticationRequestBody) {
+        var userOptional = authenticationUserRepository.findByEmail(authenticationRequestBody.getEmail());
+        if (userOptional.isPresent()) {
+            throw new IllegalArgumentException("用户已存在");
+        }
         authenticationUserRepository.save(new AuthenticationUser(
                 authenticationRequestBody.getEmail(),
                 encoder.encode(authenticationRequestBody.getPassword())));

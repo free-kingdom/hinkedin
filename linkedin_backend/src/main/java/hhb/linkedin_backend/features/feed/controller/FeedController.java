@@ -8,11 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/feed")
 @RequiredArgsConstructor
 public class FeedController {
     private final FeedService feedService;
+
+    @GetMapping
+    public ResponseEntity<List<Post>> allPostsByUser(@RequestAttribute("AuthenticatedUser") AuthenticationUser user) {
+        return feedService.getAllPostsByUser(user.getId());
+    }
 
     @PostMapping("/posts")
     public ResponseEntity<Post> createPost(
@@ -23,4 +30,12 @@ public class FeedController {
         return ResponseEntity.ok(post);
     }
 
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<Post> editPost(
+            @PathVariable long postId,
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user,
+            @RequestBody PostDTO postDTO
+    ) {
+        return ResponseEntity.ok(feedService.editPost(postId, postDTO, user.getId()));
+    }
 }

@@ -40,10 +40,6 @@ export function Signup() {
                     <Input type="email" name="email" label="邮箱" required />
                     <Input type="password" name="password" label="密码" required />
                     {errorMessage && <p className="text-red-600">{errorMessage}</p>}
-                    <label className="flex gap-1 text-md">
-                        <input className="w-5 h-5" type="checkbox" value=""/>
-                        保持登录状态
-                    </label>
                     <p className="text-xs text-center text-gray-500">
                         点击“同意并加入或继续”，即表示您同意遵守领英的
                         <a href="" className="text-linkedin font-bold hover:underline">《用户协议》</a>、

@@ -14,7 +14,7 @@ export function Layout({children, slogan} : {children: ReactNode, slogon:string}
                 {children}
             </main>
 
-            <footer className="pt-1 pb-2 text-xs bg-white font-bold">
+            <footer className="pt-1 pb-4 text-xs bg-white font-bold">
                 <ul className="flex justify-center items-center flex-wrap gap-3 mt-2 text-gray-500">
                     <li className="flex gap-1">
                         <img className="w-16" alt="dark-logo" src="/logo-dark.svg"/>

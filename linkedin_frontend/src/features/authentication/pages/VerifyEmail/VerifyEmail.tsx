@@ -13,9 +13,27 @@ export function VerifyEmail() {
     const { logout } = useAuthentication();
     const navigate = useNavigate();
 
-    const validateEmail = (code: string) => {
-        console.log(code);
-
+    const validateEmail = async (code: string) => {
+        // console.log(code);
+        try {
+            const response = await fetch(import.meta.env.VITE_API_URL
+                                       + `/api/authentication/validate-email-verification-token?token=${code}`, {
+                                           method: "PUT",
+                                           headers: {"Authorization": `Bearer ${localStorage.getItem("token")}`}
+            });
+            if (response.ok) {
+                setErrorMessage("");
+                navigate("/");
+            } else {
+                const { message } = await response.json();
+                setErrorMessage(message);
+            }
+        } catch (e) {
+            console.log(e);
+            setErrorMessage("出错了，请稍候重试");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const sendEmailValidateToken = async () => {
@@ -27,7 +45,7 @@ export function VerifyEmail() {
             });
             if (response.ok) {
                 setErrorMessage("");
-                setMessage("")
+                setMessage("验证码已发送")
             } else {
                 const { message } = response.json();
                 setErrorMessage(message);
@@ -43,10 +61,10 @@ export function VerifyEmail() {
     return  (
         <Layout>
             <Box>
-                <form onSubmit={(e: FormEvent<HTMLFormElement>) => {
+                <form onSubmit={async (e) => {
                     e.preventDefault();
                     setIsLoading(true);
-                    validateEmail(e.currentTarget.code.value);
+                    await validateEmail(e.currentTarget.code.value);
                 }}
                       className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg md:shadow-lg grid md:w-96 w-full">
                     <h2 className="font-bold text-2xl">输入6位验证码</h2>
@@ -70,6 +88,7 @@ export function VerifyEmail() {
                             重新发送
                         </button>
                     </span>
+                    {message && <p className="text-green-600">{message}</p>}
                     {errorMessage && <p className="text-red-600">{errorMessage}</p>}
                     <Button outline={false} type="submit" disabled={isLoading}>
                         提交

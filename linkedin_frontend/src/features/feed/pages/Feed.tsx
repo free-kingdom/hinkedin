@@ -1,13 +1,13 @@
 import { useAuthentication } from "../../authentication/contexts/AuthenticationContextProvider"
 
 export function Feed() {
-    const { logout } = useAuthentication();
+    const { user, logout } = useAuthentication();
 
     return (
         <div className="min-h-screen grid grid-rows-[auto_1fr] bg-white gap-4">
             <header className="bg-neutral-300 flex justify-end p-3 space-x-2 pr-8 items-center">
-                <p>您好,</p>
-                <a>user</a>
+                <p>您好, <a>{user?.email}</a></p>
+
                 <p>|</p>
                 <p onClick={logout}>登出</p>
             </header>

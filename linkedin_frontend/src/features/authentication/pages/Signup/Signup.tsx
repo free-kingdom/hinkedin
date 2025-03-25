@@ -2,16 +2,41 @@ import { Layout } from "../../components/Layout/Layout"
 import { Box } from "../../components/Box/Box";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button"
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthentication } from "../../contexts/AuthenticationContextProvider";
 
 export function Signup() {
-    const [errorMessage, setErrorMessage] = useState("*邮箱已存在");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { signup } = useAuthentication();
+
+    const doSignup = async (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true)
+        const email = e.currentTarget.email.value;
+        const password = e.currentTarget.password.value;
+        try {
+            await signup(email, password);
+            navigate("/verify-email");
+        } catch (e) {
+            console.log(e);
+            if (e instanceof Error) {
+                setErrorMessage(e.message);
+            } else {
+                setErrorMessage("未知错误，请稍候重试");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <Layout slogan="成就职业人生">
             <Box>
-                <form className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg md:shadow-lg grid gap-4 md:w-96 w-full">
+                <form onSubmit={doSignup}
+                      className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg md:shadow-lg grid gap-4 md:w-96 w-full">
                     <Input type="email" name="email" label="邮箱" required />
                     <Input type="password" name="password" label="密码" required />
                     {errorMessage && <p className="text-red-600">{errorMessage}</p>}
@@ -26,7 +51,7 @@ export function Signup() {
                         <a href="" className="text-linkedin font-bold hover:underline">《Cookie 政策》</a>。
                     </p>
                     <Button outline={false} type="submit"
-                            onClick={() => navigate("/verify-email")}>
+                            disabled={isLoading}>
                         同意并加入
                     </Button>
 

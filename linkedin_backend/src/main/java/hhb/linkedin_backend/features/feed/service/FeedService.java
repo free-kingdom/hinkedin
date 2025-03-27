@@ -6,6 +6,7 @@ import hhb.linkedin_backend.features.feed.dto.PostDTO;
 import hhb.linkedin_backend.features.feed.model.Post;
 import hhb.linkedin_backend.features.feed.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,5 +53,16 @@ public class FeedService {
 
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
+    }
+
+    public Post likePost(Long postId, Long id) {
+        Post post = getPostById(postId);
+        AuthenticationUser user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("用户不存在"));
+        if (post.getLikes().contains(user)) {
+            post.getLikes().remove(user);
+        } else {
+            post.getLikes().add(user);
+        }
+        return postRepository.save(post);
     }
 }

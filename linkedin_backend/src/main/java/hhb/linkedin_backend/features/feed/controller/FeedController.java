@@ -62,4 +62,12 @@ public class FeedController {
         return ResponseEntity.ok(feedService.getAllPostsByUser(userId));
     }
 
+
+    @PutMapping("/posts/{postId}/like")
+    public ResponseEntity<Post> likePost(
+            @PathVariable Long postId,
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user
+    ){
+        return ResponseEntity.ok(feedService.likePost(postId, user.getId()));
+    }
 }

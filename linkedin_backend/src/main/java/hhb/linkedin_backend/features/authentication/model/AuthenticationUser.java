@@ -55,6 +55,8 @@ public class AuthenticationUser {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
+    private String profilePicture = null;
+
     private void updateIsProfileCompleted() {
         this.isProfileCompleted = (lastName != null && firstName != null && company != null && position != null && location != null);
     }
@@ -87,18 +89,5 @@ public class AuthenticationUser {
     public AuthenticationUser(String email, String password) {
         this.email = email;
         this.password = password;
-        this.emailVerified = false;
-    }
-
-    public AuthenticationUser(String email, String password, String firstName, String lastName,
-                              String company, String position, String location) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.company = company;
-        this.position = position;
-        this.location = location;
-        this.emailVerified = true;
     }
 }

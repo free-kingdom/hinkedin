@@ -9,6 +9,9 @@ import hhb.linkedin_backend.features.authentication.repository.AuthenticationUse
 import hhb.linkedin_backend.features.authentication.utils.EmailService;
 import hhb.linkedin_backend.features.authentication.utils.Encoder;
 import hhb.linkedin_backend.features.authentication.utils.JsonWebToken;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +30,9 @@ public class AuthenticationService {
     private final EmailService emailService;
     private static final int durationInMinutes = 5;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     public AuthenticationUser getUser(String email) {
         return authenticationUserRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("no user"));
@@ -152,7 +158,14 @@ public class AuthenticationService {
         return authenticationUserRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long userId) {
-        authenticationUserRepository.deleteById(userId);
+        AuthenticationUser user = authenticationUserRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("用户不存在"));
+        if (user != null){
+            entityManager.createNativeQuery("DELETE FROM posts_likes WHERE user_id = ?")
+                    .setParameter(1, userId)
+                    .executeUpdate();
+            authenticationUserRepository.deleteById(userId);
+        }
     }
 }

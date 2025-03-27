@@ -10,12 +10,48 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
 public class LoadDbConfiguration {
     private final Encoder encoder;
+    private final Random random = new Random();
+
+    private AuthenticationUser createUser(String email, String password, String profilePicture,
+                                          String firstName, String lastName,
+                                          String company, String position, String location) {
+        AuthenticationUser user = new AuthenticationUser(email, encoder.encode(password));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setCompany(company);
+        user.setPosition(position);
+        user.setLocation(location);
+        user.setProfilePicture(profilePicture);
+        return user;
+    }
+
+    private Post createPost(String content, String picture, AuthenticationUser author, Set<AuthenticationUser> likes){
+        Post post = new Post();
+        post.setContent(content);
+        post.setPicture(picture);
+        post.setAuthor(author);
+        post.setLikes(likes);
+        return post;
+    }
+
+    private Set<AuthenticationUser> generateLikes(AuthenticationUser[] users) {
+        Set<AuthenticationUser> likes = new HashSet<>();
+        for (AuthenticationUser user : users) {
+            if (random.nextBoolean()) {
+                likes.add(user);
+            }
+        }
+        return likes;
+    }
 
     @Bean
     public CommandLineRunner initDatabase(
@@ -24,17 +60,17 @@ public class LoadDbConfiguration {
         return args -> {
             // test users
             AuthenticationUser[] users = {
-                    new AuthenticationUser("hhb@rof.org", encoder.encode("pass"),
+                    createUser("hhb@rof.org", "pass", "/img/b1.jpg",
                             "hb", "h", "学校", "学生", "Guangzhou"),
-                    new AuthenticationUser("ccb@rof.org", encoder.encode("pass"),
+                    createUser("ccb@rof.org", "pass", "/img/b2.jpg",
                             "cb", "c", "学校", "学生", "Shenzhen"),
-                    new AuthenticationUser("cjy@rof.org", encoder.encode("pass"),
+                    createUser("cjy@rof.org", "pass", "/img/m1.jpg",
                             "jy", "c", "公司", "研究员", "Guangzhou"),
-                    new AuthenticationUser("abc@rof.org", encoder.encode("pass"),
+                    createUser("abc@rof.org", "pass", "/img/m2.jpg",
                             "bc", "a", null, "群众", "Foshan"),
-                    new AuthenticationUser("foo@rof.org", encoder.encode("pass"),
+                    createUser("foo@rof.org", "pass", "/img/b3.jpg",
                             "oo", "f", null, "群众", "Foshan"),
-                    new AuthenticationUser("bar@rof.org", encoder.encode("pass"),
+                    createUser("bar@rof.org", "pass", "/img/wc2.jpg",
                             "ar", "b", null, "群众", "Foshan")
             };
             for (AuthenticationUser user : users) {
@@ -43,20 +79,20 @@ public class LoadDbConfiguration {
 
             // test posts
             Post[] posts = {
-                    new Post("hhb' first post", "/img/b1",
-                            users[0]),
-                    new Post("hhb' second post", "/img/b2",
-                            users[0]),
-                    new Post("ccb' first post", "/img/m1",
-                            users[1]),
-                    new Post("cjy的首个推文", "/img/m2",
-                            users[2]),
-                    new Post("abc' post: aabbcc", null,
-                            users[3]),
-                    new Post("foo' post: wooo", null,
-                            users[4]),
-                    new Post("bar: hello", null,
-                            users[5]),
+                    createPost("我的新头像", "/img/b1",
+                            users[0], generateLikes(users)),
+                    createPost("下载的小鸟图片", "/img/b2",
+                            users[0], generateLikes(users)),
+                    createPost("我的新头像", "/img/m1",
+                            users[1], generateLikes(users)),
+                    createPost("我的新头像", "/img/m2",
+                            users[2], generateLikes(users)),
+                    createPost("阿巴阿巴", null,
+                            users[3], generateLikes(users)),
+                    createPost("敷哦敷哦", null,
+                            users[4], generateLikes(users)),
+                    createPost("敷哦阿巴阿巴", null,
+                            users[5], generateLikes(users)),
             };
             for (Post post : posts) {
                 postRepository.save(post);

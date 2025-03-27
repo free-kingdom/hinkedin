@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -42,6 +43,12 @@ public class Post {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     Set<AuthenticationUser> likes;
+
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL, orphanRemoval = true
+    )
+    private List<Comment> comments;
 
     public Post(String content, String picture, AuthenticationUser author) {
         this.content = content;

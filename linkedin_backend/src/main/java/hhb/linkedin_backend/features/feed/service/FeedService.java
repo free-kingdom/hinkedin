@@ -2,11 +2,13 @@ package hhb.linkedin_backend.features.feed.service;
 
 import hhb.linkedin_backend.features.authentication.model.AuthenticationUser;
 import hhb.linkedin_backend.features.authentication.repository.AuthenticationUserRepository;
+import hhb.linkedin_backend.features.feed.dto.CommentDTO;
 import hhb.linkedin_backend.features.feed.dto.PostDTO;
+import hhb.linkedin_backend.features.feed.model.Comment;
 import hhb.linkedin_backend.features.feed.model.Post;
+import hhb.linkedin_backend.features.feed.repo.CommentRepository;
 import hhb.linkedin_backend.features.feed.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedService {
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final AuthenticationUserRepository userRepository;
 
     // 返回所有除了自己发的posts
@@ -52,6 +55,7 @@ public class FeedService {
     }
 
     public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(()->new IllegalArgumentException("推文不存在"));
         postRepository.deleteById(postId);
     }
 
@@ -64,5 +68,29 @@ public class FeedService {
             post.getLikes().add(user);
         }
         return postRepository.save(post);
+    }
+
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("评论不存在"));
+        commentRepository.deleteById(commentId);
+    }
+
+    public Comment editComment(Long commentId, CommentDTO commentDTO, AuthenticationUser user) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("评论不存在"));
+        if (comment.getId() != user.getId()) {
+            throw new IllegalArgumentException("无法修改他人评论");
+        }
+        comment.setContent(commentDTO.getContent());
+        return commentRepository.save(comment);
+    }
+
+    public Comment addComment(Long postId, Long authorId, CommentDTO commentDTO) {
+        Comment comment = new Comment();
+        Post post = postRepository.findById(postId).orElseThrow(()->new IllegalArgumentException("推文不存在"));
+        AuthenticationUser author = userRepository.findById(authorId).orElseThrow(()->new IllegalArgumentException("用户不存在"));
+        comment.setPost(post);
+        comment.setAuthor(author);
+        comment.setContent(commentDTO.getContent());
+        return commentRepository.save(comment);
     }
 }

@@ -2,7 +2,9 @@ package hhb.linkedin_backend.features.feed.controller;
 
 import hhb.linkedin_backend.dto.GeneralResponse;
 import hhb.linkedin_backend.features.authentication.model.AuthenticationUser;
+import hhb.linkedin_backend.features.feed.dto.CommentDTO;
 import hhb.linkedin_backend.features.feed.dto.PostDTO;
+import hhb.linkedin_backend.features.feed.model.Comment;
 import hhb.linkedin_backend.features.feed.model.Post;
 import hhb.linkedin_backend.features.feed.service.FeedService;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +55,7 @@ public class FeedController {
             @RequestAttribute("AuthenticatedUser") AuthenticationUser user
     ){
         feedService.deletePost(postId);
-        return new GeneralResponse("Post删除成功");
+        return new GeneralResponse("推文删除成功");
     }
 
     @GetMapping("/posts/user/{userId}")
@@ -69,5 +71,29 @@ public class FeedController {
             @RequestAttribute("AuthenticatedUser") AuthenticationUser user
     ){
         return ResponseEntity.ok(feedService.likePost(postId, user.getId()));
+    }
+
+    @PostMapping("/posts/{postId}/comment")
+    public ResponseEntity<Comment> addComment(
+            @PathVariable Long postId,
+            @RequestBody CommentDTO commentDTO,
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user
+    ) {
+        return ResponseEntity.ok(feedService.addComment(postId, user.getId(), commentDTO));
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public GeneralResponse deleteComment(@PathVariable Long commentId) {
+        feedService.deleteComment(commentId);
+        return new GeneralResponse("评论删除成功");
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<Comment> editComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentDTO commentDTO,
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user
+    ) {
+        return ResponseEntity.ok(feedService.editComment(commentId, commentDTO, user));
     }
 }

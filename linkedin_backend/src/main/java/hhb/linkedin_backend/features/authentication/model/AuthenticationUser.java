@@ -89,4 +89,16 @@ public class AuthenticationUser {
         this.password = password;
         this.emailVerified = false;
     }
+
+    public AuthenticationUser(String email, String password, String firstName, String lastName,
+                              String company, String position, String location) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.company = company;
+        this.position = position;
+        this.location = location;
+        this.emailVerified = true;
+    }
 }

@@ -4,18 +4,17 @@ export function Feed() {
     const { user, logout } = useAuthentication();
 
     return (
-        <div className="min-h-screen grid grid-rows-[auto_1fr] bg-stone-50 gap-4">
-            <div className="md:mx-16 mx-4 grid gap-4 p-2 grid-rows-[10rem_1fr_10rem] md:grid-cols-[15rem_1fr_18rem] md:grid-rows-[auto]">
-                {/* right */}
-                <div className="bg-neutral-300 rounded-lg md:h-96"></div>
-                <div className="grid grid-rows-[7rem_1fr] gap-4">
-                    {/* posting */}
-                    <div className="bg-neutral-300 rounded-lg"></div>
-                    {/* feed */}
-                    <div className="bg-neutral-300 rounded-lg"></div>
+        <div className="pt-6 min-h-screen bg-stone-50 flex justify-center w-full">
+            <div className="min-w-96 flex flex-col md:flex-row gap-8 justify-center w-full md:w-6/7 lg:w-5/6 xl:w-3/4">
+                <div className="bg-white w-full h-full md:w-1/2 lg:w-1/4">
+
                 </div>
-                {/* left */}
-                <div className="bg-neutral-300 rounded-lg md:h-64"></div>
+                <div className="bg-white w-full h-full lg:w-1/2">
+
+                </div>
+                <div className="bg-white w-full h-full md:hidden lg:block lg:w-1/3">
+
+                </div>
             </div>
         </div>
     )

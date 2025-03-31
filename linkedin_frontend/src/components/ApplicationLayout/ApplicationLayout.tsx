@@ -5,7 +5,7 @@ export function ApplicationLayout() {
     return (
         <div>
             <Header />
-            <main className="pt-12">
+            <main className="pt-14 w-full">
                 <Outlet />
             </main>
         </div>

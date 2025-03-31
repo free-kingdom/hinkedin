@@ -8,7 +8,7 @@ export function SearchInput({...otherProps}: InputProps) {
                 </svg>
             </button>
             <input {...otherProps} placeholder="搜索"
-                   className="bg-stone-100 rounded py-1.5 pl-8 focus:outline-linkedin/70 hidden sm:block"/>
+                   className="bg-stone-100 rounded py-1.5 pl-8 w-full focus:outline-linkedin/70 hidden sm:block"/>
         </div>
     );
 }

@@ -99,7 +99,7 @@ export function Profile() {
     }, []);
 
     return (
-        <div className="relative w-full"
+        <div className="relative w-full flex justify-center"
              ref={profileRef}>
             <button className="text-slate-500 hover:text-slate-700"
                     onClick={() => setShowMenu(!showMenu)}>
@@ -115,7 +115,7 @@ export function Profile() {
             </button>
             {
                 showMenu &&
-                <div className="absolute end-0">
+                <div className="absolute end-0 top-12">
                     <ProfileMenu />
                 </div>
             }

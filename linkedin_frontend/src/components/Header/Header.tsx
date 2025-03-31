@@ -7,8 +7,8 @@ export function Header() {
     const { user } = useAuthentication();
 
     return (
-        <header className="fixed bg-white w-full flex lg:justify-center h-12 shadow-sm py-7">
-            <div className="flex lg:w-5/7 w-full items-center">
+        <header className="fixed bg-white w-full flex justify-center h-12 shadow-sm py-7">
+            <div className="flex w-full md:w-6/7 lg:w-5/6 xl:w-3/4 items-center">
                 <div className="flex p-2 gap-2 sm:gap-0">
                     <NavLink to="/">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"

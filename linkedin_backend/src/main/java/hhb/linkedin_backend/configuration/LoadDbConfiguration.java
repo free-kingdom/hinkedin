@@ -31,6 +31,7 @@ public class LoadDbConfiguration {
         user.setPosition(position);
         user.setLocation(location);
         user.setProfilePicture(profilePicture);
+        user.setEmailVerified(true);
         return user;
     }
 

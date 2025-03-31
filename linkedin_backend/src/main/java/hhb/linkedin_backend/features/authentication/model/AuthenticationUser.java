@@ -30,7 +30,6 @@ public class AuthenticationUser {
     @JsonIgnore
     private String password;
 
-    @JsonIgnore
     private boolean emailVerified = false;
     @JsonIgnore
     private String emailVerificationToken = null;
@@ -43,13 +42,9 @@ public class AuthenticationUser {
 
     private String lastName;
     private String firstName;
-    @JsonIgnore
     private String company;
-    @JsonIgnore
     private String position;
-    @JsonIgnore
     private String location;
-    @JsonIgnore
     private boolean isProfileCompleted = false;
 
     @JsonIgnore

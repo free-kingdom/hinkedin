@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Profile } from "../Porfile/Profile";
 
+/* 可以使用react-router-dom的NavLink */
 export function Item({ text, url, children }) {
     const location = useLocation();
     const navigate = useNavigate();

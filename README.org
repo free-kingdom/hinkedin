@@ -2,8 +2,9 @@
 - Linkedin clone follow by Youssouf Oumar's [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][videos]] and [[https://github.com/yousoumar/linkedin][repo]].
 - A React.js + Spring Boot full-stack project
 ** difference from the videos
-1. use tailwindcss for css
+1. use tailwindcss for css, clone the Linkedin (China) website as much as possible
 2. use postgres for the database
+3. use AI to generate example data
 ** notes
 *** dev java
 1. running

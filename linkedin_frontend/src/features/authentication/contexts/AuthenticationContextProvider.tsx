@@ -28,9 +28,9 @@ export function AuthenticationContextProvider () {
     const location = useLocation();
 
     const isOnAuthPage =
-        location.pathname === "/login" ||
-        location.pathname === "/signup" ||
-        location.pathname === "/request-password-reset";
+        location.pathname === "/authentication/login" ||
+        location.pathname === "/authentication/signup" ||
+        location.pathname === "/authentication/request-password-reset";
 
     const login = async (email: string, password: string) => {
         const response = await fetch(import.meta.env.VITE_API_URL + "/api/authentication/login", {
@@ -104,7 +104,7 @@ export function AuthenticationContextProvider () {
     /* 如果用户还没有登录且不在不需要保护的页面，导航到登录页面 */
     if (!isLoading && !user && !isOnAuthPage){
         return (
-            <Navigate to="/login"></Navigate>
+            <Navigate to="/authentication/login"></Navigate>
         );
     }
 
@@ -117,7 +117,7 @@ export function AuthenticationContextProvider () {
     return (
         <AuthenticationContext value={{user, login, signup, logout}}>
             {/* /verify-email需要有user context，因此放在这里面 */}
-            {user && !user.emailVerified ? <Navigate to="/verify-email"></Navigate> : null}
+            {user && !user.emailVerified ? <Navigate to="/authentication/verify-email"></Navigate> : null}
             <Outlet />
         </AuthenticationContext>
     );

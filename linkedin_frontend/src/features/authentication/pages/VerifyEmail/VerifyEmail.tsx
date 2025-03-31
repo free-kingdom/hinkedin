@@ -1,4 +1,3 @@
-import { Layout } from "../../components/Layout/Layout"
 import { Box } from "../../components/Box/Box";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button"
@@ -59,14 +58,14 @@ export function VerifyEmail() {
     };
 
     return  (
-        <Layout>
+        <div>
             <Box>
                 <form onSubmit={async (e) => {
                     e.preventDefault();
                     setIsLoading(true);
                     await validateEmail(e.currentTarget.code.value);
                 }}
-                      className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg md:shadow-lg grid md:w-96 w-full">
+                      className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg sm:shadow-lg grid sm:w-96 w-full">
                     <h2 className="font-bold text-2xl">输入6位验证码</h2>
                     <p className="mt-3 mb-6">
                         查看邮箱，获取验证码。
@@ -105,6 +104,6 @@ export function VerifyEmail() {
                     </span>
                 </form>
             </Box>
-        </Layout>
+        </div>
     )
 }

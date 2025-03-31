@@ -1,4 +1,3 @@
-import { Layout } from "../../components/Layout/Layout"
 import { Box } from "../../components/Box/Box";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button"
@@ -48,7 +47,7 @@ export function ResetPassword() {
             });
             if (response.ok) {
                 setErrorMessage("");
-                navigate("/login");
+                navigate("/authentication/login");
             } else {
                 const { message } = await response.json();
                 setErrorMessage(message);
@@ -62,18 +61,18 @@ export function ResetPassword() {
     }
 
     return (
-        <Layout>
+        <div>
             <Box>
                 {!isEmailSent ?
                  (<form onSubmit={sendPasswordResetToken}
-                        className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg md:shadow-lg grid gap-4 md:w-96 w-full">
+                        className="justify-self-center bg-white px-8 pt-8 pb-6 rounded-lg sm:shadow-lg grid gap-4 sm:w-96 w-full">
                      <h2 className="font-bold text-3xl mb-6">忘记密码</h2>
                      <Input type="email" name="email" label="邮箱" required />
                      <p className="text-sm">如果此邮箱或电话号码与已有领英帐号匹配，我们将发送验证码到此邮箱或电话。</p>
                      <Button outline={false}  type="submit" disabled={isLoading}>
                          下一步
                      </Button>
-                     <Button outline={true} type="button" onClick={() => navigate("/login")}>
+                     <Button outline={true} type="button" onClick={() => navigate("/authentication/login")}>
                          返回
                      </Button>
                  </form>) : (
@@ -106,6 +105,6 @@ export function ResetPassword() {
                      </form>
                 )}
             </Box>
-        </Layout>
+        </div>
     )
 }

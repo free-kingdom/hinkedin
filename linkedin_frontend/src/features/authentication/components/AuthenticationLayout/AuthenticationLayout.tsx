@@ -1,17 +1,17 @@
 import { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 
-export function Layout({children, slogan} : {children: ReactNode, slogon:string}) {
+export function AuthenticationLayout() {
     return (
         <div className="bg-gray-50 grid grid-rows-[auto_1fr_auto] h-screen">
-            <header className="px-12 pt-4 md:px-32 md:pt-5 grid">
+            <header className="px-8 pt-4 sm:px-32 sm:pt-5 grid">
                 <a href="/" className="w-32">
                     <img alt="logo" src="/logo.svg" />
                 </a>
-                <h1 className="text-center text-[32px] mt-2">{slogan}</h1>
             </header>
 
             <main className="self-center">
-                {children}
+                <Outlet />
             </main>
 
             <footer className="pt-1 pb-4 text-xs bg-white font-bold">

@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { Loader } from "../../../components/Loader/Loader";
 
-interface User {
+export interface User {
     id: string;
     email: string;
     emailVerified: boolean

@@ -104,12 +104,12 @@ export function Profile() {
             <button className="text-slate-500 hover:text-slate-700"
                     onClick={() => setShowMenu(!showMenu)}>
                 <img alt="" src={user.avatar ? user.avatar : "/default-avatar.png"}
-                     className="sm:size-6 size-8"/>
+                     className="sm:size-6 size-8 rounded-full"/>
                 <div className="flex hidden sm:flex">
                     <span className="text-xs">我</span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                          className="size-4">
-                        <path d="M8 11L3 6h10z" fill-rule="evenodd"/>
+                        <path d="M8 11L3 6h10z" fillRule="evenodd"/>
                     </svg>
                 </div>
             </button>

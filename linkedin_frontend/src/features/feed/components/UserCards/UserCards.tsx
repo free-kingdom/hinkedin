@@ -77,7 +77,7 @@ function UserProfile(){
     return (
         <CardBox>
             <img src={cover} className="absolute top-0 start-0 z-10 w-full h-14 object-cover rounded-t-lg"/>
-            <img src={avatar} className="size-16 z-20"/>
+            <img src={avatar} className="size-16 z-20 rounded-full"/>
             <div className="flex flex-col">
                 <span className="font-bold text-2xl">{nm}</span>
                 <span className="text-gray-800">{company_position}</span>

@@ -7,7 +7,7 @@ function ProfileUserInfo(){
     return (
         <div className="p-4 flex flex-col gap-2">
             <div className="flex gap-2">
-                <img src={user.profileImg ? user.profileImg : "/default-avatar.png"}
+                <img src={user.avatar ? user.avatar : "/default-avatar.png"}
                      className="size-14"/>
                 <div className="flex flex-col">
                     <span className="text-xl font-bold">
@@ -103,7 +103,7 @@ export function Profile() {
              ref={profileRef}>
             <button className="text-slate-500 hover:text-slate-700"
                     onClick={() => setShowMenu(!showMenu)}>
-                <img alt="" src={user.profileImg ? user.profileImg : "/default-avatar.png"}
+                <img alt="" src={user.avatar ? user.avatar : "/default-avatar.png"}
                      className="sm:size-6 size-8"/>
                 <div className="flex hidden sm:flex">
                     <span className="text-xs">我</span>
@@ -115,7 +115,7 @@ export function Profile() {
             </button>
             {
                 showMenu &&
-                <div className="absolute end-0 top-12">
+                <div className="absolute end-0 top-14">
                     <ProfileMenu />
                 </div>
             }

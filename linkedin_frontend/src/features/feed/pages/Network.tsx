@@ -1,7 +1,7 @@
 export function Network() {
     return (
         <div>
-            network
+            Network
         </div>
     );
 }

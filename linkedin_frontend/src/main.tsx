@@ -11,6 +11,9 @@ import { AuthenticationContextProvider } from './features/authentication/context
 import { AuthenticationLayout } from './features/authentication/components/AuthenticationLayout/AuthenticationLayout'
 import { ApplicationLayout } from './components/ApplicationLayout/ApplicationLayout'
 import { Network } from './features/feed/pages/Network'
+import { Jobs } from './features/feed/pages/Jobs'
+import { Notifications } from './features/feed/pages/Notifications'
+import { Messaging } from './features/feed/pages/Messaging'
 
 const router = createBrowserRouter([
   {
@@ -53,9 +56,22 @@ const router = createBrowserRouter([
             element: <Feed />
           },
           {
+            path: "jobs",
+            element: <Jobs />
+          },
+          {
+            path: "messaging",
+            element: <Messaging />
+          },
+          {
             path: "network",
             element: <Network />
+          },
+          {
+            path: "notifications",
+            element: <Notifications />
           }
+
         ]
       }
     ]

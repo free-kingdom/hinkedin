@@ -1,29 +1,37 @@
 * hinkedin mono repo
-- Linkedin clone follow by Youssouf Oumar's [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][videos]] and [[https://github.com/yousoumar/linkedin][repo]].
-- A React.js + Spring Boot full-stack project
-** difference from the videos
-1. use tailwindcss for css, clone the Linkedin (China) website as much as possible
-2. use postgres for the database
-3. use AI to generate example data
-** notes
-*** dev java
-1. running
-   - ./gradlew bootRun
-2. continuously build and not run test each time
-   - ./gradlew build -t -x test
-3. docker
+- 领英克隆学习项目，跟随 Youssouf Oumar 的 [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][视频系列]] 和 [[https://github.com/yousoumar/linkedin][github仓库]]。
+- React.js + Spring Boot 全栈项目
+** 与视频系列的主要不同
+1. 使用 Tailwindcssfor 完成前端页面，模仿领英中国的网页但进行了一定的简化
+2. 使用 Postgres 而不是 MySQL 作为后端数据库
+** 前端技术栈
+1. Vite - Typescript, react, react-router-dom
+2. Tailwindcss 4.0
+** 后端技术栈
+1. 使用 gradle 作为构建工具
+2. Java - Spring Boot
+3. Postgres - Spring Data JPA
+4. Mailhog smtp 测试
+5. Docker
+** 开发
+*** 后端
+1. 启动 docker（数据库、SMTP 测试服务器）
    - docker compose up
    - docker compose down
-*** dev ts
+2. 启动项目
+   - ./gradlew bootRun
+3. 热重载构建但不运行测试
+   - ./gradlew build -t -x test
+*** 前端
 1. npm run dev
-** frontend
-1. typescript - react
-2. react-router-dom
-3. tailwindcss
-** backend
-1. java - spring boot
-2. postgres
-3. mailhog for smtp testing
 ** features
-- authentication
-  use jwt for security, impl login/signup/verify email/reset password
+- 验证
+  - 登录、注册、邮箱验证与重置密码
+  - 使用 jwt 进行安全验证
+- 信息流
+  - 点赞
+** 待完成
+1. 前端
+   -
+2. 后端
+   -

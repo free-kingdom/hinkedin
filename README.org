@@ -2,7 +2,7 @@
 - 领英克隆学习项目，跟随 Youssouf Oumar 的 [[https://www.youtube.com/watch?v=sO_gvRyYkek&list=PLQRe1t1nMu7C_1wTzEIaC-uDntizskmXs][视频系列]] 和 [[https://github.com/yousoumar/linkedin][github仓库]]。
 - React.js + Spring Boot 全栈项目
 ** 与视频系列的主要不同
-1. 使用 Tailwindcssfor 完成前端页面，模仿领英中国的网页但进行了一定的简化
+1. 前端的 css 部分使用 Tailwindcss4.0 而不是 scss，模仿领英中国的网页但进行了一定的简化
 2. 使用 Postgres 而不是 MySQL 作为后端数据库
 ** 前端技术栈
 1. Vite - Typescript, react, react-router-dom
@@ -13,18 +13,7 @@
 3. Postgres - Spring Data JPA
 4. Mailhog smtp 测试
 5. Docker
-** 开发
-*** 后端
-1. 启动 docker（数据库、SMTP 测试服务器）
-   - docker compose up
-   - docker compose down
-2. 启动项目
-   - ./gradlew bootRun
-3. 热重载构建但不运行测试
-   - ./gradlew build -t -x test
-*** 前端
-1. npm run dev
-** features
+** 特性
 - 验证
   - 登录、注册、邮箱验证与重置密码
   - 使用 jwt 进行安全验证
@@ -32,6 +21,26 @@
   - 点赞
 ** 待完成
 1. 前端
-   -
+   - TimeAgo 组件
 2. 后端
-   -
+   - AI 生成一些测试数据
+** 开发事项
+*** 开发
+**** 后端开发
+1. 启动 docker（数据库、SMTP 测试服务器）
+   - docker compose up
+   - docker compose down
+2. 启动项目
+   - ./gradlew bootRun
+3. 热重载构建但不运行测试
+   - ./gradlew build -t -x test
+**** 前端开发
+1. npm run dev
+2. 代码的编写顺序
+   - 开发初期更多关注功能的实现而不是样式的调整，先完成功能再进行样式调整，避免过多的样式代码（特别是控制 ui 的代码）导致的混乱
+3. 代码的可读性
+   - 需充分利用 Typescript 的优点、及时对组件进行拆分，避免代码迅速走向混乱
+   - 思考的时间需远多于编写代码的时间
+4. 组件的拆分
+   - 组件放在同名文件夹下，当组件代码过长时注意拆分文件，子组件放于大组件下
+   - 开发过程中注意可复用的组件（tailwindcss 类），及时优化组件目录结构，避免重复编写相似的 tailwindcss

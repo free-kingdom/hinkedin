@@ -21,7 +21,7 @@ export function TimeAgo({ time, className }) {
     const [ago, setAgo] = useState(createdAgo(time));
 
     useEffect(()=>{
-        const id = setInterval(()=> setAgo(createdAgo(time)), 1000);
+        const id = setInterval(()=> setAgo(createdAgo(time)), 60000);
         return () => clearInterval(id);
     }, [time]);
 

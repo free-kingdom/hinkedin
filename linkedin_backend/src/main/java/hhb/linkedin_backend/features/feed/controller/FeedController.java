@@ -73,6 +73,13 @@ public class FeedController {
         return ResponseEntity.ok(feedService.likePost(postId, user.getId()));
     }
 
+    @GetMapping("/posts/{postId}/comments")
+    public ResponseEntity<List<Comment>> getComments(
+            @PathVariable Long postId
+    ){
+        return ResponseEntity.ok(feedService.getPostComments(postId));
+    }
+
     @PostMapping("/posts/{postId}/comment")
     public ResponseEntity<Comment> addComment(
             @PathVariable Long postId,

@@ -93,4 +93,10 @@ public class FeedService {
         comment.setContent(commentDTO.getContent());
         return commentRepository.save(comment);
     }
+
+    public List<Comment> getPostComments(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("推文不存在"));
+        return commentRepository.findByPost(post);
+    }
+
 }

@@ -8,6 +8,7 @@ import hhb.linkedin_backend.features.feed.model.Comment;
 import hhb.linkedin_backend.features.feed.model.Post;
 import hhb.linkedin_backend.features.feed.repo.CommentRepository;
 import hhb.linkedin_backend.features.feed.repo.PostRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -70,9 +71,11 @@ public class FeedService {
         return postRepository.save(post);
     }
 
+    @Transactional
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("评论不存在"));
         commentRepository.deleteById(commentId);
+        postRepository.decrementCommentCount(comment.getPost().getId());
     }
 
     public Comment editComment(Long commentId, CommentDTO commentDTO, AuthenticationUser user) {
@@ -84,6 +87,7 @@ public class FeedService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public Comment addComment(Long postId, Long authorId, CommentDTO commentDTO) {
         Comment comment = new Comment();
         Post post = postRepository.findById(postId).orElseThrow(()->new IllegalArgumentException("推文不存在"));
@@ -91,6 +95,7 @@ public class FeedService {
         comment.setPost(post);
         comment.setAuthor(author);
         comment.setContent(commentDTO.getContent());
+        postRepository.incrementCommentCount(post.getId());
         return commentRepository.save(comment);
     }
 

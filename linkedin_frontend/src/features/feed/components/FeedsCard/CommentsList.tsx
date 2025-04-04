@@ -31,7 +31,7 @@ function CommentTextarea({ content, setContent, ...otherProps }) {
     );
 }
 
-export function AddCommentCard({ post, setPost, commentsList, setCommentsList }) {
+export function AddCommentCard({ post, setCommentsList, setCommentsCount }) {
     const { user } = useAuthentication();
     const [content, setContent] = useState("");
     let avatar = user.avatar ? user.avatar : "/default-avatar.png";
@@ -43,7 +43,8 @@ export function AddCommentCard({ post, setPost, commentsList, setCommentsList })
                 method: "POST",
                 body: JSON.stringify({content}),
                 onSuccess: (data) => {
-                    setCommentsList([...commentsList, data]);
+                    setCommentsList(cl => [...cl, data]);
+                    setCommentsCount(c => c + 1)
                     setContent("");
                 },
                 onFailure: (msg) => console.log(msg)
@@ -133,7 +134,7 @@ function SortCommenButton() {
     );
 }
 
-export function CommentsList({ post }) {
+export function CommentsList({ post, setCommentsCount }) {
     const [commentsList, setCommentsList] = useState([]);
 
     useEffect(() => {
@@ -150,7 +151,7 @@ export function CommentsList({ post }) {
 
     return (
         <div className="flex flex-col gap-2">
-            <AddCommentCard post={post} commentsList={commentsList} setCommentsList={setCommentsList}/>
+            <AddCommentCard post={post} setCommentsList={setCommentsList} setCommentsCount={setCommentsCount}/>
             <SortCommenButton />
             {commentsList.map(comment => {
                 return (

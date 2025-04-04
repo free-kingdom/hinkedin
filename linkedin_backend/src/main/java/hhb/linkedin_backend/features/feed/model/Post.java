@@ -50,10 +50,16 @@ public class Post {
     )
     @JsonIgnore
     private List<Comment> comments;
+    private long commentsCount = 0;
 
     public Post(String content, String picture, AuthenticationUser author) {
         this.content = content;
         this.picture = picture;
         this.author = author;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+        this.commentsCount = comments.size();
     }
 }

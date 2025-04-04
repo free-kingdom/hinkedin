@@ -13,6 +13,7 @@ interface PostProps {
     author: UserProps;
     picture: string;
     likes: UserProps[];
+    commentsCount: number;
 }
 
 function PostHead({ author, createdAt }) {
@@ -53,6 +54,7 @@ function PostButton({ text, onClick, children }) {
 export function PostCard({ post, postsList, setPostsList } : PostProps) {
     const { user } = useAuthentication();
     const [showCommentPanel, setShowCommentPanel] = useState(false);
+    const [commentsCount, setCommentsCount] = useState(post.commentsCount);
 
     let  isUserLike = post.likes.some(like => like.id === user.id);
     let avatar = user.avatar ? user.avatar : "/default-avatar.png";
@@ -90,7 +92,7 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
                 </span>
                 <span className="cursor-pointer"
                       onClick={() => setShowCommentPanel(!showCommentPanel)}>
-                    <span className="hover:underline">查看评论</span>
+                    <span className="hover:underline">{commentsCount}条评论</span>
                 </span>
             </div>
             <div className="mx-2 -my-1 border-t justify-center border-gray-200"></div>
@@ -116,7 +118,7 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
             </div>
             {
                 showCommentPanel &&
-                <CommentsList post={post}/>
+                <CommentsList post={post} setCommentsCount={setCommentsCount}/>
             }
         </div>
     );

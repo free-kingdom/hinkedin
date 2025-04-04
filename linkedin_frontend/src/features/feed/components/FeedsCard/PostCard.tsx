@@ -4,7 +4,7 @@ import { TimeAgo } from "../../../../components/TimeAgo/TimeAgo";
 import { CommentProps } from "./CommentCard";
 import { UserProps } from "../../../authentication/contexts/AuthenticationContextProvider";
 import { request } from "../../../../utils/api";
-import { CommentCard } from "./CommentCard";
+import { CommentsList, AddCommentCard } from "./CommentsList";
 
 interface PostProps {
     content: string;
@@ -13,7 +13,6 @@ interface PostProps {
     author: UserProps;
     picture: string;
     likes: UserProps[];
-    comments: CommentProps[];
 }
 
 function PostHead({ author, createdAt }) {
@@ -91,8 +90,7 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
                 </span>
                 <span className="cursor-pointer"
                       onClick={() => setShowCommentPanel(!showCommentPanel)}>
-                    <span className="hover:underline">{post.comments.length}条评论</span>
-
+                    <span className="hover:underline">查看评论</span>
                 </span>
             </div>
             <div className="mx-2 -my-1 border-t justify-center border-gray-200"></div>
@@ -116,7 +114,11 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
                     </svg>
                 </PostButton>
             </div>
-            {showCommentPanel && <CommentCard />}
+            {
+                showCommentPanel &&
+                <CommentsList post={post}/>
+            }
         </div>
     );
 }
+

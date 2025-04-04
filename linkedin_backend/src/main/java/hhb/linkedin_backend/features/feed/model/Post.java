@@ -48,6 +48,7 @@ public class Post {
             mappedBy = "post",
             cascade = CascadeType.ALL, orphanRemoval = true
     )
+    @JsonIgnore
     private List<Comment> comments;
 
     public Post(String content, String picture, AuthenticationUser author) {

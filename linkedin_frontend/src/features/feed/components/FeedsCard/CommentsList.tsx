@@ -85,7 +85,60 @@ export function AddCommentCard({ post, setCommentsList, setCommentsCount }) {
     )
 }
 
-function CommentCard({ comment } : CommentProps) {
+function CommentOps({ comment, setCommentsList }) {
+    const { user } = useAuthentication();
+    const [showOps, setShowOps] = useState(false);
+    const [isEdit, setIsEdit] = useState(false);
+    let putable = user.id === comment.author.id;
+    const onHide = () => {
+        setCommentsList(li => li.filter(c => c.id !== comment.id));
+    };
+
+    const onDelete = async () => {
+        await request({
+            endpoint: "/api/feed/comments/" + comment.id,
+            method: "DELETE",
+            onSuccess: (data) => setCommentsList(li => li.filter(c => c.id !== comment.id)),
+            onFailure: (msg) => console.log(msg)
+        });
+    };
+
+    return (
+        <div className="relative">
+            <div className="p-1 hover:bg-gray-100 rounded-full cursor-pointer"
+                 onClick={() => setShowOps(!showOps)}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                     className="size-4 text-gray-700">
+                    <path d="M14 12a2 2 0 11-2-2 2 2 0 012 2zM4 10a2 2 0 102 2 2 2 0 00-2-2zm16 0a2 2 0 102 2 2 2 0 00-2-2z"/>
+                </svg>
+            </div>
+            {showOps &&
+             <div className="absolute top-6 end-0">
+                 {
+                     putable
+                     ? <div className="flex flex-col w-14 bg-white shadow-md py-1 rounded-lg text-xs font-bold text-gray-600">
+                         <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer"
+                                 onClick={onDelete}>
+                             删除
+                         </button>
+                         <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer">编辑</button>
+                     </div>
+                     : <div className="flex flex-col w-14 bg-white shadow-md py-1 rounded-lg text-xs font-bold text-gray-600">
+                         <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer"
+                                 onClick={onHide}>
+                             屏蔽
+                         </button>
+                         <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer">举报</button>
+                     </div>
+
+                 }
+             </div>}
+        </div>
+
+    );
+}
+
+function CommentCard({ comment, setCommentsList } : CommentProps) {
     let author = comment.author;
     let avatar = author.avatar ? author.avatar : "/default-avatar.png";
     let nm = author.lastName + author.firstName
@@ -106,12 +159,7 @@ function CommentCard({ comment } : CommentProps) {
                 </div>
                 <div className="absolute top-0 end-0 flex gap-1 items-center">
                     <TimeAgo time={new Date(createdAt)} className="text-xs text-gray-500 leading-tight"/>
-                    <div className="p-1 hover:bg-gray-100 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                             className="size-4 text-gray-700">
-                            <path d="M14 12a2 2 0 11-2-2 2 2 0 012 2zM4 10a2 2 0 102 2 2 2 0 00-2-2zm16 0a2 2 0 102 2 2 2 0 00-2-2z"/>
-                        </svg>
-                    </div>
+                    <CommentOps comment={comment} setCommentsList={setCommentsList}/>
                 </div>
             </div>
             <div className="px-10">
@@ -155,7 +203,7 @@ export function CommentsList({ post, setCommentsCount }) {
             <SortCommenButton />
             {commentsList.map(comment => {
                 return (
-                    <CommentCard key={comment.id} comment={comment}/>
+                    <CommentCard key={comment.id} comment={comment} setCommentsList={setCommentsList} />
                 );
             })}
         </div>

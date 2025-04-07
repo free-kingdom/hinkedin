@@ -11,6 +11,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthorIdOrderByCreatedAtDesc(Long authorId);
     List<Post> findByAuthorIdNotOrderByCreatedAtDesc(Long authorId);
+    List<Post> findAllByOrderByCreatedAtDesc();
 
     @Modifying
     @Query("UPDATE posts p SET p.commentsCount = p.commentsCount + 1 WHERE p.id = :id")
@@ -19,5 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("UPDATE posts p SET p.commentsCount = p.commentsCount - 1 WHERE p.id = :id")
     int decrementCommentCount(@Param("id") Long id);
+
 
 }

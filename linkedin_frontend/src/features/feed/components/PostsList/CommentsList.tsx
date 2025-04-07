@@ -133,7 +133,10 @@ function CommentOps({ comment, setCommentsList, setIsEdit }) {
                              删除
                          </button>
                          <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer"
-                                 onClick={() => setIsEdit(true)}>
+                                 onClick={() => {
+                                     setIsEdit(true);
+                                     setShowOps(false);
+                                 }}>
                              编辑
                          </button>
                      </div>
@@ -217,9 +220,9 @@ function CommentCard({ comment, setCommentsList } : CommentProps) {
                         </form>
                     )
                     : (
-                        <div className="flex">
+                        <div className="flex flex-col gap-1">
                             <span className="text-xs">{comment.content}</span>
-                            {comment.updatedAt && <sapn className="justify-self-end text-xs text-gray-700">（已编辑）</sapn>}
+                            {comment.updatedAt && <span className="self-end text-xs text-gray-700">（已编辑）</span>}
                         </div>
                     )
 

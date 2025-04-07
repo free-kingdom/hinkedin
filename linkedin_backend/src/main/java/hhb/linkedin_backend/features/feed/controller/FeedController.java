@@ -26,6 +26,11 @@ public class FeedController {
         return ResponseEntity.ok(feedService.getFeedPosts(user.getId()));
     }
 
+    @GetMapping("/posts")
+    public ResponseEntity<List<Post>> getAllPosts() {
+        return ResponseEntity.ok(feedService.getAllPosts());
+    }
+
     @PostMapping("/posts")
     public ResponseEntity<Post> createPost(
             @RequestBody PostDTO postDTO,

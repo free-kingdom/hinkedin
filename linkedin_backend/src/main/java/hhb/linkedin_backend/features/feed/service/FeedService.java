@@ -21,6 +21,10 @@ public class FeedService {
     private final CommentRepository commentRepository;
     private final AuthenticationUserRepository userRepository;
 
+    public List<Post> getAllPosts() {
+        return postRepository.findAllByOrderByCreatedAtDesc();
+    }
+
     // 返回所有除了自己发的posts
     public List<Post> getFeedPosts(Long userId) {
         return postRepository.findByAuthorIdNotOrderByCreatedAtDesc(userId);

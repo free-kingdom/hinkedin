@@ -1,7 +1,7 @@
 import { useAuthentication } from "../../authentication/contexts/AuthenticationContextProvider"
 import { RecommendCard } from "../components/RecommendCard/RecommendCard";
 import { UserCards } from "../components/UserCards/UserCards";
-import { FeedsCard } from "../components/FeedsCard/FeedsCard";
+import { PostsList } from "../components/PostsList/PostsList";
 
 export function Feed() {
     const { user, logout } = useAuthentication();
@@ -13,7 +13,7 @@ export function Feed() {
                     <UserCards />
                 </div>
                 <div className="w-full h-full lg:w-1/2">
-                    <FeedsCard />
+                    <PostsList />
                 </div>
                 <div className="w-full h-full md:hidden lg:block lg:w-1/3">
                     <RecommendCard />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuthentication } from "../../../authentication/contexts/AuthenticationContextProvider";
+import { request } from "../../../../utils/api";
 
 function PostFeedButton({ text, children }) {
     return (
@@ -10,9 +11,21 @@ function PostFeedButton({ text, children }) {
     );
 }
 
-function WritePost({ user, setShowWritePost }) {
+function WritePost({ user, setShowWritePost, setPostsList }) {
     let avatar = user.avatar ? user.avatar : "/default-avatar.png";
     const [postContent, setPostContent] = useState("");
+
+    let doPost = async () => {
+        await request({
+            endpoint: "/api/feed/posts",
+            method: "POST",
+            body: JSON.stringify({content: postContent, picture: ""}),
+            onSuccess: (data) => setPostsList(pl => [data, ...pl]),
+            onFailure: (msg) => console.log(msg)
+        });
+        setShowWritePost(false);
+    }
+
     return (
         <div className="relative z-60 h-1/2">
             <button className="absolute top-2 end-2 rounded-full hover:bg-gray-100 p-1.5"
@@ -59,7 +72,9 @@ function WritePost({ user, setShowWritePost }) {
                             </g>
                         </svg>
                     </div>
-                    <button className="bg-linkedin text-white font-bold text-sm rounded-full px-2.5 cursor-pointer hover:bg-blue-800">
+                    <button className="bg-linkedin text-white font-bold text-sm rounded-full px-2.5 cursor-pointer hover:bg-blue-800"
+                            onClick={doPost}
+                            disabled={!postContent}>
                         发布
                     </button>
                 </div>
@@ -68,7 +83,7 @@ function WritePost({ user, setShowWritePost }) {
     );
 }
 
-export function WritePostCard() {
+export function WritePostCard({ setPostsList }) {
     const { user } = useAuthentication();
     const [showWritePost, setShowWritePost] = useState(false);
     let avatar = user.avatar ? user.avatar : "/default-avatar.png";
@@ -82,7 +97,7 @@ export function WritePostCard() {
                         <div className="fixed top-0 start-0 bg-black/70 p-2 size-full z-50"
                              onClick={() => setShowWritePost(!showWritePost)}>
                         </div>
-                        <WritePost user={user} setShowWritePost={setShowWritePost}/>
+                        <WritePost user={user} setShowWritePost={setShowWritePost} setPostsList={setPostsList}/>
                     </div>
                 )
             }

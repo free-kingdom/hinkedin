@@ -3,14 +3,14 @@ import { WritePostCard } from "./WritePostCard";
 import { PostCard }  from "./PostCard"
 import { request } from "../../../../utils/api";
 
-function PostsList() {
+export function PostsList() {
     const [postsList, setPostsList] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         let fetchFeeds = async () => {
             await request({
-                endpoint: "/api/feed",
+                endpoint: "/api/feed/posts",
                 onSuccess: (data) => setPostsList(data),
                 onFailure: (msg) => setErrorMessage(msg)
             });
@@ -21,12 +21,17 @@ function PostsList() {
 
     return (
         <div className="flex flex-col gap-2">
-            {postsList.map((post)=> {
-                return (
-                    <PostCard key={post.id} post={post} postsList={postsList} setPostsList={setPostsList} />
-                );
-            })}
+            <WritePostCard setPostsList={setPostsList} />
+            <SeparatorAndSort />
+            <div className="flex flex-col gap-2">
+                {postsList.map((post)=> {
+                    return (
+                        <PostCard key={post.id} post={post} postsList={postsList} setPostsList={setPostsList} />
+                    );
+                })}
+            </div>
         </div>
+
     );
 }
 
@@ -49,6 +54,7 @@ function SortDropDown({ sortBy, onClick }) {
             <ul >
                 <DropDownItem text="热门" sortBy={sortBy} onClick={onClick}/>
                 <DropDownItem text="最近" sortBy={sortBy} onClick={onClick}/>
+                <DropDownItem text="所有" sortBy={sortBy} onClick={onClick}/>
             </ul>
         </div>
     );
@@ -93,14 +99,3 @@ function SeparatorAndSort() {
         </div>
     );
 }
-
-export function FeedsCard() {
-    return (
-        <div className="flex flex-col gap-2">
-            <WritePostCard />
-            <SeparatorAndSort />
-            <PostsList />
-        </div>
-    );
-}
-

@@ -85,10 +85,11 @@ export function AddCommentCard({ post, setCommentsList, setCommentsCount }) {
     )
 }
 
-function CommentOps({ comment, setCommentsList }) {
+function CommentOps({ comment, setCommentsList, setIsEdit }) {
     const { user } = useAuthentication();
     const [showOps, setShowOps] = useState(false);
-    const [isEdit, setIsEdit] = useState(false);
+    const opsRef = useRef(null);
+
     let putable = user.id === comment.author.id;
     const onHide = () => {
         setCommentsList(li => li.filter(c => c.id !== comment.id));
@@ -103,8 +104,18 @@ function CommentOps({ comment, setCommentsList }) {
         });
     };
 
+    useEffect(()=>{
+        function handleClickOutside(evt) {
+            if (opsRef.current && !opsRef.current.contains(evt.target)) {
+                setShowOps(false);
+            }
+        }
+        window.addEventListener("pointerdown", handleClickOutside);
+        return () => window.removeEventListener("pointerdown", handleClickOutside);
+    }, []);
+
     return (
-        <div className="relative">
+        <div className="relative" ref={opsRef}>
             <div className="p-1 hover:bg-gray-100 rounded-full cursor-pointer"
                  onClick={() => setShowOps(!showOps)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -121,7 +132,10 @@ function CommentOps({ comment, setCommentsList }) {
                                  onClick={onDelete}>
                              删除
                          </button>
-                         <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer">编辑</button>
+                         <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer"
+                                 onClick={() => setIsEdit(true)}>
+                             编辑
+                         </button>
                      </div>
                      : <div className="flex flex-col w-14 bg-white shadow-md py-1 rounded-lg text-xs font-bold text-gray-600">
                          <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer"
@@ -130,7 +144,6 @@ function CommentOps({ comment, setCommentsList }) {
                          </button>
                          <button className="w-full hover:bg-gray-100 px-2 py-1 cursor-pointer">举报</button>
                      </div>
-
                  }
              </div>}
         </div>
@@ -146,6 +159,20 @@ function CommentCard({ comment, setCommentsList } : CommentProps) {
     let location = author.location;
     let company = author.company;
     let createdAt = comment.createdAt;
+    const [isEdit, setIsEdit] = useState(false);
+    const [content, setContent] = useState(comment.content);
+    let doEdit = async () => {
+        await request({
+            endpoint: "/api/feed/comments/" + comment.id,
+            method: "PUT",
+            body: JSON.stringify({content}),
+            onSuccess: (data) => {
+                setCommentsList(cl => cl.map(c => c.id !== comment.id ? c : data));
+                setIsEdit(false);
+            },
+            onFailure: (msg) => console.log(msg)
+        });
+    }
     return (
         <div className="flex flex-col gap-1">
             <div className="flex leading-tight relative gap-2">
@@ -159,11 +186,44 @@ function CommentCard({ comment, setCommentsList } : CommentProps) {
                 </div>
                 <div className="absolute top-0 end-0 flex gap-1 items-center">
                     <TimeAgo time={new Date(createdAt)} className="text-xs text-gray-500 leading-tight"/>
-                    <CommentOps comment={comment} setCommentsList={setCommentsList}/>
+                    <CommentOps comment={comment} setCommentsList={setCommentsList} setIsEdit={setIsEdit}/>
                 </div>
             </div>
             <div className="px-10">
-                <span className="text-xs">{comment.content}</span>
+                {
+                    isEdit
+                    ? (
+                        <form className="flex flex-col gap-2"
+                              onSubmit={(evt) => {
+                                  evt.preventDefault();
+                              }}>
+                            <input name="" type="text" value={content} className="border border-linkedin focus:border-2 focus:outline-none text-xs p-2 rounded-full "
+                                   onChange={(evt) => setContent(evt.target.value)}/>
+                            <div className="flex gap-2">
+                                <button type="submit"
+                                        className="font-bold text-xs text-white bg-linkedin hover:bg-blue-900 rounded-full px-1.5 py-1"
+                                        onClick={doEdit}>
+                                    保存提交
+                                </button>
+                                <button type="button"
+                                        className="font-bold text-xs bg-white border rounded-full px-1.5 py-1"
+                                        onClick={() => {
+                                            setIsEdit(false);
+                                            setContent(comment.content)
+                                        }}>
+                                    取消
+                                </button>
+                            </div>
+                        </form>
+                    )
+                    : (
+                        <div className="flex">
+                            <span className="text-xs">{comment.content}</span>
+                            {comment.updatedAt && <sapn className="justify-self-end text-xs text-gray-700">（已编辑）</sapn>}
+                        </div>
+                    )
+
+                }
             </div>
             <div className="flex items-center text-xs font-bold text-gray-700 px-9">
                 <button className="hover:bg-gray-100 p-1 rounded-md">赞</button>

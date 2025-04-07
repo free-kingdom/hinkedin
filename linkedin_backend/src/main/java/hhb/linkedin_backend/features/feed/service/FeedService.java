@@ -80,7 +80,7 @@ public class FeedService {
 
     public Comment editComment(Long commentId, CommentDTO commentDTO, AuthenticationUser user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->new IllegalArgumentException("评论不存在"));
-        if (comment.getId() != user.getId()) {
+        if (comment.getAuthor().getId() != user.getId()) {
             throw new IllegalArgumentException("无法修改他人评论");
         }
         comment.setContent(commentDTO.getContent());

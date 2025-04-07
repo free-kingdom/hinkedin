@@ -8,6 +8,7 @@ import hhb.linkedin_backend.features.feed.model.Comment;
 import hhb.linkedin_backend.features.feed.model.Post;
 import hhb.linkedin_backend.features.feed.repo.CommentRepository;
 import hhb.linkedin_backend.features.feed.repo.PostRepository;
+import hhb.linkedin_backend.features.notifications.service.NotificationsService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class FeedService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final AuthenticationUserRepository userRepository;
+    private final NotificationsService notificationsService;
 
     public List<Post> getAllPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc();
@@ -66,13 +68,16 @@ public class FeedService {
 
     public Post likePost(Long postId, Long id) {
         Post post = getPostById(postId);
-        AuthenticationUser user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("用户不存在"));
-        if (post.getLikes().contains(user)) {
-            post.getLikes().remove(user);
+        AuthenticationUser liker = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("用户不存在"));
+        if (post.getLikes().contains(liker)) {
+            post.getLikes().remove(liker);
         } else {
-            post.getLikes().add(user);
+            post.getLikes().add(liker);
+            notificationsService.sendLikeNotification(liker, post.getAuthor(), post.getId());
         }
-        return postRepository.save(post);
+        Post savedPost = postRepository.save(post);
+        notificationsService.sendLikesToPost(postId, savedPost.getLikes());
+        return savedPost;
     }
 
     @Transactional
@@ -100,7 +105,10 @@ public class FeedService {
         comment.setAuthor(author);
         comment.setContent(commentDTO.getContent());
         postRepository.incrementCommentCount(post.getId());
-        return commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+        notificationsService.sendCommentNotification(author, post.getAuthor(), post.getId());
+        notificationsService.sendCommentsToPost(postId, savedComment);
+        return savedComment;
     }
 
     public List<Comment> getPostComments(Long postId) {

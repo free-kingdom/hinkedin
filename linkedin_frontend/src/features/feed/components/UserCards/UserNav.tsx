@@ -1,5 +1,3 @@
-import { NavLink } from "react-router-dom";
-import { useAuthentication } from "../../../authentication/contexts/AuthenticationContextProvider";
 import { CardBox } from "../CardBox/CardBox";
 
 function UserNavItem({ text, children }) {
@@ -13,7 +11,7 @@ function UserNavItem({ text, children }) {
     );
 }
 
-function UserNav() {
+export function UserNav() {
     return (
         <CardBox>
             <ul>
@@ -47,52 +45,5 @@ function UserNav() {
                 </UserNavItem>
             </ul>
         </CardBox>
-    );
-}
-
-function Friends() {
-    return (
-        <CardBox>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                 className="absolute size-4 top-3 end-3">
-                <path d="M9 4a3 3 0 11-3-3 3 3 0 013 3zM6.75 8h-1.5A2.25 2.25 0 003 10.25V15h6v-4.75A2.25 2.25 0 006.75 8zM13 8V6h-1v2h-2v1h2v2h1V9h2V8z"/>
-            </svg>
-            <div className="flex flex-col text-sm">
-                <span className="font-bold ">好友</span>
-                <span className="font-bold text-gray-500">拓展职场人脉</span>
-            </div>
-        </CardBox>
-    );
-}
-
-function UserProfile(){
-    const { user } = useAuthentication();
-    let cover = user.cover ? user.cover : "/default-cover.png";
-    let avatar = user.avatar ? user.avatar : "/default-avatar.png";
-    let nm = user.lastName + user.firstName;
-    let company_position = user.company + user.position;
-    let location = user.location;
-    let company = user.company;
-
-    return (
-        <CardBox>
-            <img src={cover} className="absolute top-0 start-0 z-10 w-full h-14 object-cover rounded-t-lg"/>
-            <img src={avatar} className="size-16 z-20 rounded-full"/>
-            <div className="flex flex-col">
-                <span className="font-bold text-2xl">{nm}</span>
-                <span className="text-gray-800">{company_position}</span>
-                <span className="text-gray-600 text-sm">{location}</span>
-            </div>
-        </CardBox>
-    );
-}
-
-export function UserCards() {
-    return (
-        <div className="flex flex-col gap-2">
-            <UserProfile />
-            <Friends />
-            <UserNav />
-        </div>
     );
 }

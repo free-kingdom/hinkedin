@@ -25,7 +25,7 @@ function PostHead({ author, createdAt }) {
 
     return (
         <div className="flex gap-2 items-center">
-            <img src={avatar} className="size-11"/>
+            <img src={avatar} className="size-11 rounded-full"/>
             <div className="flex flex-col leading-tight">
                 <span className="font-bold">{nm}</span>
                 <div className="flex text-sm text-gray-500">

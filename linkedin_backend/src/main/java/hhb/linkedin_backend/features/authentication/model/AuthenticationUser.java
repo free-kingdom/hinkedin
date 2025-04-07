@@ -7,6 +7,7 @@ package hhb.linkedin_backend.features.authentication.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hhb.linkedin_backend.features.feed.model.Comment;
 import hhb.linkedin_backend.features.feed.model.Post;
+import hhb.linkedin_backend.features.notifications.model.Notification;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -54,6 +55,15 @@ public class AuthenticationUser {
     @JsonIgnore
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> receivedNotifications;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> actedNotifications;
+
 
     private String profilePicture = null;
 

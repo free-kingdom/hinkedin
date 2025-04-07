@@ -1,8 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Profile } from "../Porfile/Profile";
+import { useWebSocket } from "../../../../features/ws/WsContextProvider/WsContextProvider";
+import { useEffect } from "react";
+import { useAuthentication } from "../../../../features/authentication/contexts/AuthenticationContextProvider";
 
 /* 可以使用react-router-dom的NavLink */
-export function Item({ text, url, children }) {
+function Item({ text, url, children }) {
     const location = useLocation();
     const navigate = useNavigate();
     let isActive = location.pathname === url;
@@ -19,6 +22,13 @@ export function Item({ text, url, children }) {
 }
 
 export function Navbar() {
+    const { user } = useAuthentication();
+    const wsClient = useWebSocket();
+
+    useEffect(() => {
+
+    }, [user?.id, wsClient]);
+
     return (
         <div>
             <ul className="flex items-center">

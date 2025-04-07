@@ -2,14 +2,21 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { Loader } from "../../../components/Loader/Loader";
 
-export interface UserProps {
-    id: string;
+export interface User {
+    id: number;
     email: string;
-    emailVerified: boolean
+    emailVerified: boolean;
+    lastName: string;
+    firstName: string;
+    company: string;
+    position: string;
+    location: string;
+    profilePicture: string | null;
+    profileCompleted: boolean;
 }
 
 interface AuthenticationContextType {
-    user: UserProps | null;
+    user: User | null;
     login: (email:string, password:string) => Promise<void>;
     sign: (email:string, password:string) => Promise<void>;
     logout: () => void;
@@ -22,7 +29,7 @@ export function useAuthentication() {
 }
 
 export function AuthenticationContextProvider () {
-    const [user, setUser] = useState<UserProps | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     /* location.pathname 这个 state 变化时重新通过 effect 获取用户 context */
     const location = useLocation();

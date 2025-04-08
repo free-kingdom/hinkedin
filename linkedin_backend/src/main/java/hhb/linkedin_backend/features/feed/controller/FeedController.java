@@ -94,6 +94,11 @@ public class FeedController {
         return ResponseEntity.ok(feedService.addComment(postId, user.getId(), commentDTO));
     }
 
+    @GetMapping("/comments/{commentId}")
+    public ResponseEntity<Comment> getComment(@PathVariable long commentId) {
+        return ResponseEntity.ok(feedService.getCommentById(commentId));
+    }
+
     @DeleteMapping("/comments/{commentId}")
     public GeneralResponse deleteComment(@PathVariable Long commentId) {
         feedService.deleteComment(commentId);

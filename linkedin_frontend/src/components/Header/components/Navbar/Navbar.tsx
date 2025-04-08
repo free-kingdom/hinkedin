@@ -1,18 +1,26 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Profile } from "../Porfile/Profile";
 import { useWebSocket } from "../../../../features/ws/WsContextProvider/WsContextProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthentication } from "../../../../features/authentication/contexts/AuthenticationContextProvider";
+import { NotificationBadge } from "../../../NotificationBadge/NotificationBadge";
+import { request } from "../../../../utils/api";
 
 /* 可以使用react-router-dom的NavLink */
-function Item({ text, url, children }) {
+function Item({ text, url, unread, children }) {
     const location = useLocation();
     const navigate = useNavigate();
     let isActive = location.pathname === url;
 
     return (
-        <li className="w-12 sm:w-16 text-slate-500 hover:text-slate-700">
-            <button className="flex flex-col items-center w-full"
+        <li className="w-12 sm:w-16 text-slate-500 hover:text-slate-700 relative">
+            {
+                unread > 0 &&
+                <span className="absolute -top-1 end-2 size-4 bg-red-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">{unread}</span>
+                </span>
+            }
+            <button className="flex flex-col items-center w-full "
                     onClick={() => navigate(url)}>
                 {children}
                 <span className="text-xs hidden sm:block">{text}</span>
@@ -24,9 +32,35 @@ function Item({ text, url, children }) {
 export function Navbar() {
     const { user } = useAuthentication();
     const wsClient = useWebSocket();
+    const [notificationsList, setNotificationsList] = useState([]);
+    let nonReadNotifications = notificationsList.filter(n => !n.read);
 
     useEffect(() => {
+        let fetchNotifications = async () => {
+            await request({
+                endpoint: "/api/notifications",
+                onSuccess: setNotificationsList,
+                onFailure: msg => console.log(msg)
+            });
+        };
+        fetchNotifications();
+    }, []);
 
+    useEffect(() => {
+        const subsribtion = wsClient?.subscribe(
+            `/topic/users/${user?.id}/notifications`,
+            (msg) => {
+                const notification = JSON.parse(msg.body);
+                setNotificationsList(prev => {
+                    const idx = prev.findIndex(n => n.id === notification.id);
+                    if (idx === -1){
+                        return [notification, ...prev];
+                    }
+                    return prev.map(n => n.id === notification.id ? notification : n);
+                })
+            }
+        );
+        return () => subsribtion?.unsubscribe();
     }, [user?.id, wsClient]);
 
     return (
@@ -56,7 +90,7 @@ export function Navbar() {
                         <path d="M16 4H8a7 7 0 000 14h4v4l8.16-5.39A6.78 6.78 0 0023 11a7 7 0 00-7-7zm-8 8.25A1.25 1.25 0 119.25 11 1.25 1.25 0 018 12.25zm4 0A1.25 1.25 0 1113.25 11 1.25 1.25 0 0112 12.25zm4 0A1.25 1.25 0 1117.25 11 1.25 1.25 0 0116 12.25z"></path>
                     </svg>
                 </Item>
-                <Item text="通知" url="/notifications">
+                <Item text="通知" url="/notifications" unread={nonReadNotifications.length}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" focusable="false"
                          className="size-6">
                         <path d="M22 19h-8.28a2 2 0 11-3.44 0H2v-1a4.52 4.52 0 011.17-2.83l1-1.17h15.7l1 1.17A4.42 4.42 0 0122 18zM18.21 7.44A6.27 6.27 0 0012 2a6.27 6.27 0 00-6.21 5.44L5 13h14z"></path>

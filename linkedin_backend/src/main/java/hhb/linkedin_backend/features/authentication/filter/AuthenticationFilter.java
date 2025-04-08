@@ -40,7 +40,12 @@ public class AuthenticationFilter extends HttpFilter {
             return;
         }
 
-        if (unsecureEndpoints.contains(request.getRequestURI())) {
+        // ws
+        String upgradeHeader = request.getHeader("Upgrade");
+
+        if (unsecureEndpoints.contains(request.getRequestURI())
+            || (upgradeHeader != null && upgradeHeader.equalsIgnoreCase("websocket"))
+        ) {
             chain.doFilter(request, response);
             return;
         }

@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface NotificationsRepository extends JpaRepository<Notification, Long> {
-    List<Notification> findByRecipientOrderByCreatedAt(AuthenticationUser recipient);
-
+    List<Notification> findByRecipientOrderByCreatedAtDesc(AuthenticationUser recipient);
 }

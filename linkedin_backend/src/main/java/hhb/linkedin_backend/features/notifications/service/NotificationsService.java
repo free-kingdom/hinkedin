@@ -6,18 +6,20 @@ import hhb.linkedin_backend.features.notifications.model.Notification;
 import hhb.linkedin_backend.features.notifications.model.NotificationType;
 import hhb.linkedin_backend.features.notifications.repo.NotificationsRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationsService {
     private final NotificationsRepository notificationsRepository;
     private final SimpMessagingTemplate messagingTemplate;
     public List<Notification> getNotifications(AuthenticationUser user) {
-        return notificationsRepository.findByRecipientOrderByCreatedAt(user);
+        return notificationsRepository.findByRecipientOrderByCreatedAtDesc(user);
     }
 
     public Notification markNotificationRead(Long notificationId) {
@@ -38,7 +40,7 @@ public class NotificationsService {
         notification.setRecipient(recipient);
         notification.setResourceId(resourceId);
         notification.setType(NotificationType.LIKE);
-
+        log.info("Sending like notification");
         messagingTemplate.convertAndSend("/topic/users/" + recipient.getId() + "/notifications",
                 notificationsRepository.save(notification));
     }

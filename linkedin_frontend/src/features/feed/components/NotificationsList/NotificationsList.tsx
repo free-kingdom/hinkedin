@@ -54,7 +54,6 @@ export function NotificationsList() {
                         })
                     }
                 </div>
-
             }
         </div>
     );

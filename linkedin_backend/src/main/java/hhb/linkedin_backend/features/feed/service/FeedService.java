@@ -96,6 +96,10 @@ public class FeedService {
         return commentRepository.save(comment);
     }
 
+    public Comment getCommentById(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("评论不存在"));
+    }
+
     @Transactional
     public Comment addComment(Long postId, Long authorId, CommentDTO commentDTO) {
         Comment comment = new Comment();

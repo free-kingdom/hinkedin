@@ -14,6 +14,7 @@ import { Network } from './features/feed/pages/Network'
 import { Jobs } from './features/feed/pages/Jobs'
 import { Notifications } from './features/feed/pages/Notifications'
 import { Messaging } from './features/feed/pages/Messaging'
+import { PostPage } from './features/feed/pages/PostPage'
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Feed />
+          },
+          {
+              path: "posts/:id",
+            element: <PostPage />
           },
           {
             path: "jobs",

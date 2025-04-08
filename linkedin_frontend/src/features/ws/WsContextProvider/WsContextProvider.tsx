@@ -1,4 +1,4 @@
-import { CompatClient, Stomp } from "@stomp/stompjs";
+import { Client, Stomp } from "@stomp/stompjs";
 import { createContext, ReactNode, useContext, useEffect, useState} from "react";
 
 const wsContext = createContext<CompatClient | null>(null);
@@ -6,32 +6,39 @@ const wsContext = createContext<CompatClient | null>(null);
 export const useWebSocket = () => useContext(wsContext);
 
 export function WebSocketContextProvider ({ children } : { children: ReactNode }) {
-    const [stompClient, setStompClient] = useState<CompatClient | null>(null);
+    const [stompClient, setStompClient] = useState(null);
 
     useEffect(() => {
-        const client = Stomp.client(`ws://localhost:8080/ws?token=${localStorage.getItem("token")}`);
-        client.connect(
-            {},
-            () => {
-                console.log("Connected to WebSocket");
-                setStompClient(client);
-            },
-            (error: unknown) => {
-                console.error("Error connecting to WebSocket:", error);
+        const client = new Client({
+            brokerURL: `${import.meta.env.VITE_API_URL}/ws`,
+            connectHeaders: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
             }
-        );
+        });
+
+        client.onConnect = (frame) => {
+            console.log("Connected to WebSocket");
+            setStompClient(client);
+        };
+
+        client.onDisconnect = () => {
+            console.log("Disconnected to WebSocket");
+        };
+
+        client.onWebSocketClose = () => {
+            console.log("WebSocket closed");
+        }
+
+        client.activate();
 
         return () => {
-            if (client.connected) {
-                client.disconnect(() => console.log("Disconnected from WebSocket"));
-            }
+            client.deactivate();
         };
     }, []);
 
     return (
-        <wsContext.Provider value={wsContext}>
+        <wsContext.Provider value={stompClient}>
         {children}
         </wsContext.Provider>
     );
-
 }

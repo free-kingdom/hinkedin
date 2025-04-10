@@ -38,6 +38,10 @@ public class AuthenticationService {
         return authenticationUserRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("no user"));
     }
 
+    public AuthenticationUser getUserById(Long id) {
+        return authenticationUserRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("no user"));
+    }
+
     // 注册时验证邮箱
     public void sendEmailVerificationToken(String email) {
         var userOptional = authenticationUserRepository.findByEmail(email);

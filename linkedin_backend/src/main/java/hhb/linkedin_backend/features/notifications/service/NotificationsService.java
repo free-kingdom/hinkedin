@@ -2,6 +2,8 @@ package hhb.linkedin_backend.features.notifications.service;
 
 import hhb.linkedin_backend.features.authentication.model.AuthenticationUser;
 import hhb.linkedin_backend.features.feed.model.Comment;
+import hhb.linkedin_backend.features.messaging.model.Conversation;
+import hhb.linkedin_backend.features.messaging.model.Message;
 import hhb.linkedin_backend.features.notifications.model.Notification;
 import hhb.linkedin_backend.features.notifications.model.NotificationType;
 import hhb.linkedin_backend.features.notifications.repo.NotificationsRepository;
@@ -67,5 +69,14 @@ public class NotificationsService {
 
     public void sendLikesToPost(Long postId, Set<AuthenticationUser> likes) {
         messagingTemplate.convertAndSend("/topic/likes/" + postId, likes);
+    }
+
+    public void sendConversationToUsers(Long senderId, Long receiverId, Conversation conversation) {
+        messagingTemplate.convertAndSend("/topic/users/" + senderId + "/conversations/", conversation);
+        messagingTemplate.convertAndSend("/topic/users/" + receiverId + "/conversations/", conversation);
+    }
+
+    public void sendMessageToConversation(Long conversationId, Message message) {
+        messagingTemplate.convertAndSend("/topic/conversations/" + conversationId, message);
     }
 }

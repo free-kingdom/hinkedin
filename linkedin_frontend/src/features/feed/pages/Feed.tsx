@@ -4,9 +4,11 @@ import { UserProfile } from "../components/UserCards/UserProfile"
 import { Friends } from "../components/UserCards/Friends";
 import { UserNav } from "../components/UserCards/UserNav";
 import { PostsList } from "../components/PostsList/PostsList";
+import { usePageTitle } from "../../../hooks/usePageTitle";
 
 export function Feed() {
     const { user, logout } = useAuthentication();
+    usePageTitle("Feed");
 
     return (
         <div className="pt-6 min-h-screen flex justify-center w-full">

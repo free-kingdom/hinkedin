@@ -1,8 +1,11 @@
 import { UserProfile } from "../components/UserCards/UserProfile";
 import { NotificationManageCard } from "../components/UserCards/NotificationManageCard";
 import { NotificationsList } from "../components/NotificationsList/NotificationsList";
+import { usePageTitle } from "../../../hooks/usePageTitle";
 
 export function Notifications() {
+    usePageTitle("Notifications");
+
     return (
         <div className="pt-6 min-h-screen flex justify-center w-full">
             <div className="min-w-96 flex flex-col md:flex-row gap-6 justify-center w-full md:w-6/7 lg:w-5/6 xl:w-3/4">

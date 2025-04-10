@@ -1,20 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom"
-import './index.css'
-import { Feed } from './features/feed/pages/Feed'
-import { Login } from './features/authentication/pages/Login/Login'
-import { Signup } from './features/authentication/pages/Signup/Signup'
-import { ResetPassword } from './features/authentication/pages/ResetPassword/ResetPassword'
-import { VerifyEmail } from './features/authentication/pages/VerifyEmail/VerifyEmail'
-import { AuthenticationContextProvider } from './features/authentication/contexts/AuthenticationContextProvider'
-import { AuthenticationLayout } from './features/authentication/components/AuthenticationLayout/AuthenticationLayout'
-import { ApplicationLayout } from './components/ApplicationLayout/ApplicationLayout'
-import { Network } from './features/feed/pages/Network'
-import { Jobs } from './features/feed/pages/Jobs'
-import { Notifications } from './features/feed/pages/Notifications'
-import { Messaging } from './features/feed/pages/Messaging'
-import { PostPage } from './features/feed/pages/PostPage'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import './index.css';
+import { Feed } from './features/feed/pages/Feed';
+import { Login } from './features/authentication/pages/Login/Login';
+import { Signup } from './features/authentication/pages/Signup/Signup';
+import { ResetPassword } from './features/authentication/pages/ResetPassword/ResetPassword';
+import { VerifyEmail } from './features/authentication/pages/VerifyEmail/VerifyEmail';
+import { AuthenticationContextProvider } from './features/authentication/contexts/AuthenticationContextProvider';
+import { AuthenticationLayout } from './features/authentication/components/AuthenticationLayout/AuthenticationLayout';
+import { ApplicationLayout } from './components/ApplicationLayout/ApplicationLayout';
+import { Network } from './features/feed/pages/Network';
+import { Jobs } from './features/feed/pages/Jobs';
+import { Notifications } from './features/feed/pages/Notifications';
+import { Messaging } from './features/messaging/pages/Messaging/Messaging';
+import { PostPage } from './features/feed/pages/PostPage';
+import { Conversation } from './features/messaging/pages/Conversation/Conversation';
 
 const router = createBrowserRouter([
   {
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
             element: <Feed />
           },
           {
-              path: "posts/:id",
+            path: "posts/:id",
             element: <PostPage />
           },
           {
@@ -66,7 +67,13 @@ const router = createBrowserRouter([
           },
           {
             path: "messaging",
-            element: <Messaging />
+            element: <Messaging />,
+            children: [
+              {
+                path: "conversations/:id",
+                element: <Conversation />
+              }
+            ]
           },
           {
             path: "network",

@@ -31,5 +31,6 @@ public class Message {
     // optional 指定对应的外键不能为null, 即每个message必须都对应有一个conversation
     @JsonIgnore
     @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     private Conversation conversation;
 }

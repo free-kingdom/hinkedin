@@ -73,8 +73,6 @@ public class AuthenticationUser {
     @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Conversation> conversationsAsRecipient;
 
-
-
     private String profilePicture = null;
 
     private void updateIsProfileCompleted() {

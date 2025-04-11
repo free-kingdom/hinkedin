@@ -54,21 +54,23 @@ public class MessagingService {
         Conversation conversation = new Conversation();
         conversation.setAuthor(sender);
         conversation.setRecipient(receiver);
-        conversation = conversationRepo.save(conversation);
 
         Message message = new Message();
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setContent(content);
         message.setConversation(conversation);
-        message = messageRepo.save(message);
 
         conversation.getMessages().add(message);
+        conversation = conversationRepo.save(conversation);
+
+        // messageRepo.save(message);
         notificationsService.sendConversationToUsers(sender.getId(), receiver.getId(), conversation);
         return conversation;
 
     }
 
+    @Transactional
     public Message sendMessageToConversation(Long conversationId, AuthenticationUser user,
                                              Long receiverId, String content) {
         AuthenticationUser receiver = authenticationService.getUserById(receiverId);
@@ -82,9 +84,10 @@ public class MessagingService {
             message.setReceiver(receiver);
             message.setContent(content);
             message.setConversation(conversation);
-            message = messageRepo.save(message);
 
             conversation.getMessages().add(message);
+            conversationRepo.save(conversation);
+            message = messageRepo.save(message);
             notificationsService.sendConversationToUsers(user.getId(), receiver.getId(), conversation);
             notificationsService.sendMessageToConversation(conversation.getId(), message);
 
@@ -101,5 +104,6 @@ public class MessagingService {
         }
         message.setRead(true);
         messageRepo.save(message);
+        notificationsService.sendMessageToConversation(message.getConversation().getId(), message);
     }
 }

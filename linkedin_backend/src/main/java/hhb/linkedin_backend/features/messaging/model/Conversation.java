@@ -22,7 +22,7 @@ public class Conversation {
     @ManyToOne
     private AuthenticationUser recipient;
 
-    @OneToMany
+    @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages = new ArrayList<>();
 
 }

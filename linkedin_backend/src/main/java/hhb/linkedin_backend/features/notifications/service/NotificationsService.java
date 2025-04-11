@@ -72,8 +72,8 @@ public class NotificationsService {
     }
 
     public void sendConversationToUsers(Long senderId, Long receiverId, Conversation conversation) {
-        messagingTemplate.convertAndSend("/topic/users/" + senderId + "/conversations/", conversation);
-        messagingTemplate.convertAndSend("/topic/users/" + receiverId + "/conversations/", conversation);
+        messagingTemplate.convertAndSend("/topic/users/" + senderId + "/conversations", conversation);
+        messagingTemplate.convertAndSend("/topic/users/" + receiverId + "/conversations", conversation);
     }
 
     public void sendMessageToConversation(Long conversationId, Message message) {

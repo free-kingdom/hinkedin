@@ -1,10 +1,13 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { usePageTitle } from "../../../../hooks/usePageTitle";
 import { RecommendCard } from "../../../feed/components/RecommendCard/RecommendCard";
 import { ConversationList } from "../../components/ConversationList/ConversationList";
 
 export function Messaging() {
-    usePageTitle("Messaging");
+    usePageTitle("消息");
+    const navigate = useNavigate();
+    const location = useLocation();
+    const onConversation = location.pathname.includes("conversations");
 
     return (
         <div className="pt-6 flex justify-center w-full">
@@ -13,7 +16,7 @@ export function Messaging() {
                     <div className="w-full md:w-1/3">
                         <ConversationList />
                     </div>
-                    <div className="hidden md:block flex-grow">
+                    <div className="hidden md:block flex-grow h-full">
                         <Outlet />
                     </div>
                 </div>

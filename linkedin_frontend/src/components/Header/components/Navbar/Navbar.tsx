@@ -47,7 +47,7 @@ export function Navbar() {
     }, []);
 
     useEffect(() => {
-        const subsribtion = wsClient?.subscribe(
+        const subsription = wsClient?.subscribe(
             `/topic/users/${user?.id}/notifications`,
             (msg) => {
                 const notification = JSON.parse(msg.body);
@@ -60,7 +60,7 @@ export function Navbar() {
                 })
             }
         );
-        return () => subsribtion?.unsubscribe();
+        return () => subsription?.unsubscribe();
     }, [user?.id, wsClient]);
 
     return (

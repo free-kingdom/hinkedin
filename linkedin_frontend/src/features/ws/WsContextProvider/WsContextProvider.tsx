@@ -6,7 +6,7 @@ const wsContext = createContext<CompatClient | null>(null);
 export const useWebSocket = () => useContext(wsContext);
 
 export function WebSocketContextProvider ({ children } : { children: ReactNode }) {
-    const [stompClient, setStompClient] = useState(null);
+    const [stompClient, setStompClient] = useState<Client>(null);
 
     useEffect(() => {
         const client = new Client({

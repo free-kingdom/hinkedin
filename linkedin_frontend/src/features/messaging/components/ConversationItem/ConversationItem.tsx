@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuthentication } from "../../../authentication/contexts/AuthenticationContextProvider";
 import { TimeAgo } from "../../../../components/TimeAgo/TimeAgo";
 import { useWebSocket } from "../../../ws/WsContextProvider/WsContextProvider";
+import { request } from "../../../../utils/api";
 
 export interface ConversationItem {
     conversation: IConversation;
@@ -15,7 +16,7 @@ export function ConversationItem(props: ConversationItem) {
     const { id } = useParams();
     const isActive = id && Number(id) === conversation.id ? true : false;
     const { user } = useAuthentication();
-    const toUser = conversation.recipient === user?.id ? conversation.author : conversation.recipient;
+    const toUser = conversation.recipient.id === user?.id ? conversation.author : conversation.recipient;
     const avatar = toUser.profilePicture ? toUser.profilePicture : "/default-avatar.png";
     const unreadMsgCount = conversation.messages.filter(msg => msg.receiver.id === user?.id && !msg.read).length;
     const recentMsg = conversation.messages[conversation.messages.length - 1];

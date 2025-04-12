@@ -12,8 +12,11 @@ import hhb.linkedin_backend.features.authentication.service.AuthenticationServic
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/authentication")   // api访问前缀
@@ -89,5 +92,12 @@ public class AuthenticationController {
     public GeneralResponse deleteUser(@RequestAttribute("AuthenticatedUser") AuthenticationUser user) {
         authenticationService.deleteUser(user.getId());
         return new GeneralResponse("用户注销成功");
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<AuthenticationUser>> getUsers(
+            @RequestAttribute("AuthenticatedUser") AuthenticationUser user
+    ){
+        return ResponseEntity.ok(authenticationService.getUsers(user.getId()));
     }
 }

@@ -8,11 +8,13 @@ import hhb.linkedin_backend.features.messaging.repo.ConversationRepo;
 import hhb.linkedin_backend.features.messaging.repo.MessageRepo;
 import hhb.linkedin_backend.features.notifications.service.NotificationsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MessagingService {
@@ -28,7 +30,8 @@ public class MessagingService {
     public Conversation getConversation(AuthenticationUser user, Long conversationId) {
         Conversation conversation = conversationRepo.findById(conversationId)
                 .orElseThrow(() -> new IllegalArgumentException("会话不存在"));
-        if (!conversation.getAuthor().getId().equals(user.getId())) {
+        if (!conversation.getAuthor().getId().equals(user.getId())
+                && !conversation.getRecipient().getId().equals(user.getId())) {
             throw new IllegalArgumentException("会话不属于用户");
         }
         return conversation;
@@ -73,6 +76,7 @@ public class MessagingService {
     @Transactional
     public Message sendMessageToConversation(Long conversationId, AuthenticationUser user,
                                              Long receiverId, String content) {
+
         AuthenticationUser receiver = authenticationService.getUserById(receiverId);
         Conversation conversation = conversationRepo.findById(conversationId)
                 .orElseThrow(()-> new IllegalArgumentException("会话不存在"));
@@ -84,10 +88,8 @@ public class MessagingService {
             message.setReceiver(receiver);
             message.setContent(content);
             message.setConversation(conversation);
-
-            conversation.getMessages().add(message);
-            conversationRepo.save(conversation);
             message = messageRepo.save(message);
+            conversation.getMessages().add(message);
             notificationsService.sendConversationToUsers(user.getId(), receiver.getId(), conversation);
             notificationsService.sendMessageToConversation(conversation.getId(), message);
 

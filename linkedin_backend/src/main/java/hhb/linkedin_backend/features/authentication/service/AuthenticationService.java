@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -171,5 +172,9 @@ public class AuthenticationService {
                     .executeUpdate();
             authenticationUserRepository.deleteById(userId);
         }
+    }
+
+    public List<AuthenticationUser> getUsers(Long id) {
+        return authenticationUserRepository.findByIdNot(id);
     }
 }

@@ -42,7 +42,7 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    Set<AuthenticationUser> likes;
+    Set<AuthenticationUser> likes = Set.of();
 
     @OneToMany(
             mappedBy = "post",

@@ -22,11 +22,15 @@ export interface IConversation {
 }
 
 function NoMessage() {
+    const navigate = useNavigate();
     return (
         <div className="flex flex-col justify-center text-center items-center gap-2 text-sm text-gray-900 p-4">
             <span className="" >暂时没有消息</span>
             <span className="" >主动出击，推进事业发展</span>
-            <button className="border rounded-full px-2 py-1 font-bold w-20 hover:bg-gray-100 hover:ring cursor-pointer">发消息</button>
+            <button className="border rounded-full px-2 py-1 font-bold w-20 hover:bg-gray-100 hover:ring cursor-pointer"
+                    onClick={() => navigate("conversations/new")}>
+                发消息
+            </button>
         </div>
     );
 }
@@ -38,11 +42,14 @@ export function ConversationList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        request<IConversation[]>({
-            endpoint: "/api/messaging/conversations",
-            onSuccess: data => setConversationList(data),
-            onFailure: msg => console.log(msg)
-        })
+        const fetchConversations = async () => {
+            await request<IConversation[]>({
+                endpoint: "/api/messaging/conversations",
+                onSuccess: data => setConversationList(data),
+                onFailure: msg => console.log(msg)
+            });
+        };
+        fetchConversations();
     }, []);
 
     useEffect(() => {

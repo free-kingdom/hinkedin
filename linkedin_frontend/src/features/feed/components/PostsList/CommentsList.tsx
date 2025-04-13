@@ -59,7 +59,7 @@ export function AddCommentCard({ post, setCommentsList, setCommentsCount }) {
                   onSubmit={doSubmit}>
                 <div className="relative">
                     <CommentTextarea content={content} setContent={setContent} />
-                    <div className="absolute bottom-2 w-full px-1 flex gap-1 justify-between">
+                    <div className="absolute bottom-2.5 w-full px-1 flex gap-1 justify-between">
                         <div className="flex">
                             <div className="rounded-full hover:bg-gray-100 p-1.5">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

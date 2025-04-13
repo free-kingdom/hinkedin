@@ -1,18 +1,18 @@
+import { User } from "../../../authentication/contexts/AuthenticationContextProvider";
 import { useEffect, useRef, useState } from "react";
 import { useAuthentication } from "../../../authentication/contexts/AuthenticationContextProvider";
 import { TimeAgo } from "../../../../components/TimeAgo/TimeAgo";
-import { CommentProps } from "./CommentCard";
-import { UserProps } from "../../../authentication/contexts/AuthenticationContextProvider";
+import { CommentsList, AddCommentCard } from "../PostsList/CommentsList";
 import { request } from "../../../../utils/api";
-import { CommentsList, AddCommentCard } from "./CommentsList";
+import { SetState } from "../../../../utils/type";
 
-interface PostProps {
+export interface IPost {
     content: string;
     createdAt: string;
     updatedAt: string | null;
-    author: UserProps;
+    author: User;
     picture: string;
-    likes: UserProps[];
+    likes: User[];
     commentsCount: number;
 }
 
@@ -38,7 +38,7 @@ function PostHead({ author, createdAt }) {
     );
 }
 
-function PostOps({ post, setPostsList, setIsEdit }) {
+function PostOps({ post, setIsEdit, setIsDeleted}) {
     const { user } = useAuthentication();
     const [showOps, setShowOps] = useState(false);
     const opsRef = useRef(null);
@@ -47,7 +47,7 @@ function PostOps({ post, setPostsList, setIsEdit }) {
         await request({
             endpoint: "/api/feed/posts/" + post.id,
             method: "DELETE",
-            onSuccess: (data) => setPostsList(li => li.filter(p => p.id !== post.id)),
+            onSuccess: (data) => setIsDeleted(true),
             onFailure: (msg) => console.log(msg)
         });
     };
@@ -99,30 +99,23 @@ function PostButton({ text, onClick, children }) {
     );
 }
 
-/* 如果likes数组很大（如上千人点赞），考虑返回用户是否点赞和点赞的数量即可，如果需要能够查看点赞的用户，则惰性加载
-/  目前简单实现
-/*/
-export function PostCard({ post, postsList, setPostsList } : PostProps) {
+export function Post(props: {post: IPost}) {
+    const [post, setPost] = useState(props.post);
     const { user } = useAuthentication();
     const [showCommentPanel, setShowCommentPanel] = useState(false);
     const [commentsCount, setCommentsCount] = useState(post.commentsCount);
     const [isEdit, setIsEdit] = useState(false);
     const [postContent, setPostContent] = useState(post.content);
+    const [isDeleted, setIsDeleted] = useState(false);
 
     let isUserLike = post.likes?.some(like => like.id === user.id);
     let avatar = user.avatar ? user.avatar : "/default-avatar.png";
-
     let onLike = async () => {
         await request({
             endpoint: "/api/feed/posts/" + post.id + "/like",
             method: "PUT",
-            onSuccess: (post) => {
-                setPostsList(
-                    postsList.map(p => {
-                        return p.id === post.id
-                             ? { ...p, likes: isUserLike ? p.likes.filter(u => u.id !== user.id) : [...p.likes, user]}
-                             : p
-                }));
+            onSuccess: (data) => {
+                setPost(data);
             },
             onFailure: (msg) => console.log(msg)
         });
@@ -134,7 +127,7 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
             method: "PUT",
             body: JSON.stringify({content: postContent}),
             onSuccess: (data) => {
-                setPostsList(pl => pl.map(p => p.id !== post.id ? p : data));
+                setPost(data);
                 setIsEdit(false);
             },
             onFailure: (msg) => console.log(msg)
@@ -142,13 +135,13 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
     }
 
     return (
-        <div className="px-4 pt-4 pb-1 border border-gray-300 rounded-lg bg-white flex flex-col gap-2 relative">
-            {
-                post.author.id === user.id &&
-                <div className="absolute top-2 end-2">
-                    <PostOps post={post} setPostsList={setPostsList} setIsEdit={setIsEdit} />
-                </div>
-            }
+        <div className={`${isDeleted ? "hidden" : ""} px-4 pt-4 pb-1 border border-gray-300 rounded-lg bg-white flex flex-col gap-2 relative`}>
+        {
+            post.author.id === user.id &&
+            <div className="absolute top-2 end-2">
+                <PostOps post={post} setIsEdit={setIsEdit} setIsDeleted={setIsDeleted}/>
+            </div>
+        }
         <PostHead author={post.author} createdAt={post.createdAt}/>
         <div className="px-2 flex flex-col gap-2">
             {
@@ -182,7 +175,6 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
                     </div>
                 )
             }
-            {post?.picture && <img src={post.picture} className="self-center object-cover w-full max-h-72"/>}
         </div>
         <div className="flex px-4 justify-between text-xs text-gray-500">
             <span className="flex gap-0.5 items-center">
@@ -225,4 +217,3 @@ export function PostCard({ post, postsList, setPostsList } : PostProps) {
         </div>
     );
 }
-

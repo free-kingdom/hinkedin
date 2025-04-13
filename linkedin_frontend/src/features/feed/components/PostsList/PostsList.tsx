@@ -2,38 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { WritePostCard } from "./WritePostCard";
 import { PostCard }  from "./PostCard"
 import { request } from "../../../../utils/api";
-
-export function PostsList() {
-    const [postsList, setPostsList] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
-
-    useEffect(() => {
-        let fetchFeeds = async () => {
-            await request({
-                endpoint: "/api/feed/posts",
-                onSuccess: (data) => setPostsList(data),
-                onFailure: (msg) => setErrorMessage(msg)
-            });
-        };
-
-        fetchFeeds();
-    }, []);
-
-    return (
-        <div className="flex flex-col gap-2">
-            <WritePostCard setPostsList={setPostsList} />
-            <SeparatorAndSort />
-            <div className="flex flex-col gap-2">
-                {postsList.map((post)=> {
-                    return (
-                        <PostCard key={post.id} post={post} postsList={postsList} setPostsList={setPostsList} />
-                    );
-                })}
-            </div>
-        </div>
-
-    );
-}
+import { Post } from "../Post/Post";
 
 function DropDownItem({ text, sortBy, onClick }) {
     let isActive = text === sortBy;
@@ -97,5 +66,34 @@ function SeparatorAndSort() {
                 }
             </div>
         </div>
+    );
+}
+
+export function PostsList({ fetchListURL } : {fetchListURL: string}) {
+    const [postsList, setPostsList] = useState(null);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        let fetchFeeds = async () => {
+            await request({
+                endpoint: fetchListURL,
+                onSuccess: (data) => setPostsList(data),
+                onFailure: (msg) => setErrorMessage(msg)
+            });
+        };
+
+        fetchFeeds();
+    }, []);
+
+    return (
+        <div className="flex flex-col gap-2">
+            <WritePostCard setPostsList={setPostsList} />
+            <SeparatorAndSort />
+            <div className="flex flex-col gap-2">
+                {postsList &&
+                 postsList.map(post => <Post key={post.id} post={post} />)}
+            </div>
+        </div>
+
     );
 }

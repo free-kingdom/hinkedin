@@ -8,7 +8,7 @@ import { usePageTitle } from "../../../hooks/usePageTitle";
 
 export function Feed() {
     const { user, logout } = useAuthentication();
-    usePageTitle("Feed");
+    usePageTitle("信息流");
 
     return (
         <div className="pt-6 min-h-screen flex justify-center w-full">
@@ -21,7 +21,7 @@ export function Feed() {
                     </div>
                 </div>
                 <div className="w-full h-full lg:w-1/2">
-                    <PostsList />
+                    <PostsList fetchListURL={"/api/feed/posts"}/>
                 </div>
                 <div className="w-full h-full md:hidden lg:block lg:w-1/3">
                     <RecommendCard />

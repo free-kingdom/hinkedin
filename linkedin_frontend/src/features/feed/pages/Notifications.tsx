@@ -4,7 +4,7 @@ import { NotificationsList } from "../components/NotificationsList/Notifications
 import { usePageTitle } from "../../../hooks/usePageTitle";
 
 export function Notifications() {
-    usePageTitle("Notifications");
+    usePageTitle("通知");
 
     return (
         <div className="pt-6 min-h-screen flex justify-center w-full">

@@ -60,7 +60,7 @@ function ProfileMenu() {
             <ul className="p-3">
                 <li className="font-bold text-md">管理</li>
                 <ProfileMenuItem>
-                    <a href="/">文章和动态</a>
+                    <a href="/userposts">文章和动态</a>
                 </ProfileMenuItem>
                 <ProfileMenuItem>
                     <a href="/">职位发布账号</a>

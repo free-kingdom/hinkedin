@@ -29,7 +29,7 @@ export function NotificationItem({ notification, setNotificationsList }) {
             await request({
                 endpoint: "/api/notifications/" + notification.id,
                 method: "PUT",
-                onSuccess: (data) => console.log(data),
+                onSuccess: (data) => {},
                 onFailure: (msg) => console.log(msg)
             });
         }

@@ -17,6 +17,7 @@ import { Messaging } from './features/messaging/pages/Messaging/Messaging';
 import { PostPage } from './features/feed/pages/PostPage';
 import { Conversation } from './features/messaging/pages/Conversation/Conversation';
 import { NewConversation } from './features/messaging/pages/NewConversation/NewConversation';
+import { UserPosts } from './features/feed/pages/UserPosts';
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
           {
             path: "notifications",
             element: <Notifications />
+          },
+          {
+            path: "userposts",
+            element: <UserPosts />
           }
 
         ]

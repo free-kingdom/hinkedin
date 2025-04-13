@@ -1,27 +1,14 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { request } from "../../../utils/api";
+import { useAuthentication } from "../../authentication/contexts/AuthenticationContextProvider"
+import { RecommendCard } from "../components/RecommendCard/RecommendCard";
 import { UserProfile } from "../components/UserCards/UserProfile"
 import { Friends } from "../components/UserCards/Friends";
 import { UserNav } from "../components/UserCards/UserNav";
-import { RecommendCard } from "../components/RecommendCard/RecommendCard";
-import { Post, IPost } from "../components/Post/Post";
+import { PostsList } from "../components/PostsList/PostsList";
+import { usePageTitle } from "../../../hooks/usePageTitle";
 
-export function PostPage() {
-    const [post, setPost] = useState<IPost>(null);
-    const{ id } = useParams();
-
-    useEffect(() => {
-        const fetchPost = async () => {
-            await request({
-                endpoint: "/api/feed/posts/" + id,
-                onSuccess: data => setPost(data),
-                onFailure: msg => console.log(msg)
-            });
-        };
-
-        fetchPost();
-    }, [id]);
+export function UserPosts() {
+    const { user, logout } = useAuthentication();
+    usePageTitle("文章和动态");
 
     return (
         <div className="pt-6 min-h-screen flex justify-center w-full">
@@ -34,14 +21,12 @@ export function PostPage() {
                     </div>
                 </div>
                 <div className="w-full h-full lg:w-1/2">
-                    <div className="flex flex-col gap-2">
-                        {post && <Post key={post.id} post={post} />}
-                    </div>
+                    <PostsList fetchListURL={"/api/feed/posts/user/" + user.id}/>
                 </div>
                 <div className="w-full h-full md:hidden lg:block lg:w-1/3">
                     <RecommendCard />
                 </div>
             </div>
         </div>
-    );
+    )
 }

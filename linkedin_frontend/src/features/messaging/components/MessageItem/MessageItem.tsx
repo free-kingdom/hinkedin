@@ -6,8 +6,7 @@ interface MessageItemProps {
     message: IMessage;
 }
 
-export function MessageItem(props: IMessage) {
-    const [message, setMessage] = useState<IMessage>(props.message);
+export function MessageItem({ message }: IMessage) {
     const { user } = useAuthentication();
     const isMessageByUser = message.sender.id === user.id;
     const msgRef = useRef<HTMLDivElement>();

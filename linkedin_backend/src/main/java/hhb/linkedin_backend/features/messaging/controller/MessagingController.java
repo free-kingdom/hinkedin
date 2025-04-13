@@ -24,6 +24,13 @@ public class MessagingController {
         return messagingService.getConversationsOfUser(user);
     }
 
+    @GetMapping("/conversations/user/{userId}")
+    public Conversation getConversationByUserId(
+            @RequestAttribute("AuthenticatedUser")AuthenticationUser user,
+            @PathVariable Long userId
+    ){
+        return messagingService.getConversationWithSomeone(user, userId);
+    }
 
     @GetMapping("/conversation/{conversationId}")
     public Conversation getConversation(
@@ -52,11 +59,11 @@ public class MessagingController {
     }
 
     @PutMapping("/conversations/messages/{messageID}")
-    public void markMessageRead(
+    public Message markMessageRead(
             @RequestAttribute("AuthenticatedUser")AuthenticationUser user,
             @PathVariable Long messageID
     ){
-        messagingService.markMessageAsRead(user, messageID);
+        return messagingService.markMessageAsRead(user, messageID);
     }
 
 }

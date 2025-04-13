@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,6 +36,19 @@ public class MessagingService {
             throw new IllegalArgumentException("会话不属于用户");
         }
         return conversation;
+    }
+
+    public Conversation getConversationWithSomeone(AuthenticationUser user, Long someoneId){
+        AuthenticationUser someone = authenticationService.getUserById(someoneId);
+        Optional<Conversation> result = conversationRepo.findByAuthorAndRecipient(user, someone);
+        if (result.isPresent()){
+            return result.get();
+        }
+        result = conversationRepo.findByAuthorAndRecipient(someone, user);
+        if (result.isPresent()){
+            return result.get();
+        }
+        throw new IllegalArgumentException("会话不存在");
     }
 
     @Transactional
@@ -99,7 +113,7 @@ public class MessagingService {
         }
     }
 
-    public void markMessageAsRead(AuthenticationUser user, Long messageID) {
+    public Message markMessageAsRead(AuthenticationUser user, Long messageID) {
         Message message = messageRepo.findById(messageID).orElseThrow(() -> new IllegalArgumentException("消息不存在"));
         if (!message.getReceiver().getId().equals(user.getId())) {
             throw new IllegalArgumentException("该消息不属于用户");
@@ -107,5 +121,7 @@ public class MessagingService {
         message.setRead(true);
         messageRepo.save(message);
         notificationsService.sendMessageToConversation(message.getConversation().getId(), message);
+        notificationsService.sendConversationToUsers(user.getId(), message.getReceiver().getId(), message.getConversation());
+        return message;
     }
 }

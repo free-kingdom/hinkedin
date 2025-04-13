@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { IConversation } from "../../components/ConversationList/ConversationList";
 import { useAuthentication } from "../../../authentication/contexts/AuthenticationContextProvider";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { request } from "../../../../utils/api";
 import { MessageItem } from "../../components/MessageItem/MessageItem";
 import { useWebSocket } from "../../../ws/WsContextProvider/WsContextProvider";
@@ -16,36 +16,59 @@ export function Conversation() {
     const avatar = toUser?.profilePicture || "/default-avatar.png";
     const [isProcessing, setIsProcessing] = useState(false);
     const wsClient = useWebSocket();
+    const navigate = useNavigate();
 
+        /* 组件挂载时获取对话 */
     useEffect(() => {
         const fetchConversatoin = async () => {
             await request({
                 endpoint: "/api/messaging/conversation/" + id,
                 onSuccess: (data) => {
                     setConversation(data);
+                    data.messages.forEach(m => {
+                        if (m.receiver.id === user.id && !m.read){
+                            markMessageRead(m.id);
+                        }
+                    });
                 },
-                onFailure: msg => console.log(msg)
+                onFailure: msg => {
+                    navigate("/messaging");
+                }
             });
         }
         fetchConversatoin();
     }, [id]);
 
+    /* 标记消息为已读，成功后更新conversation */
+    const markMessageRead = async (msgId) => {
+        await request({
+            endpoint: "/api/messaging/conversations/messages/" + msgId,
+            method: "PUT",
+            onSuccess: (message) => {},
+            onFailure: (msg) => console.log(msg)
+        });
+    };
+
+    /* 订阅更新的消息，并标记已读 */
     useEffect(() => {
         const subscription = wsClient?.subscribe(
             `/topic/conversations/${conversation?.id}`,
             msg => {
                 const message = JSON.parse(msg.body);
-                setConversation(prev => {
-                    return {
-                        ...prev,
-                        messages: prev?.messages.findIndex(m => m.id === message.id) === -1
-                                ? [...prev.messages, message]
-                                : prev?.messages.map(m => m.id === message.id ? message : m)
-                    }
-                });
+                if (message.receiver.id === user.id && !message.read) {
+                    markMessageRead(message.id);
+                } else {
+                    setConversation(prev => {
+                        return {
+                            ...prev,
+                            messages: prev?.messages.findIndex(m => m.id === message.id) === -1
+                                    ? [...prev.messages, message]
+                                    : prev?.messages.map(m => m.id === message.id ? message : m)
+                        }
+                    });
+                };
             }
         );
-
         return () => subscription?.unsubscribe();
     }, [conversation?.id, wsClient]);
 
@@ -75,7 +98,6 @@ export function Conversation() {
             }
         });
     };
-
 
     return (
         <div className="flex flex-col h-full">
